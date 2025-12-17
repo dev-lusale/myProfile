@@ -18,7 +18,7 @@
         </article>
     </main>
     
-    @if (isCollapsed)
+    @if (!isCollapsed)
     {
         <div class="sidebar-overlay" @onclick="CloseSidebar"></div>
     }
@@ -35,30 +35,20 @@
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         await AnalyticsService.TrackPageViewAsync(uri.PathAndQuery, "Portfolio");
         
-        // Initialize sidebar state based on screen size
-        await InitializeSidebarState();
+        // Initialize sidebar state - always start collapsed
+        InitializeSidebarState();
         
         // Subscribe to sidebar state changes
         SidebarService.OnStateChanged += OnSidebarStateChanged;
     }
 
-    private async Task InitializeSidebarState()
+    private void InitializeSidebarState()
     {
         try
         {
-            // Check if we're on mobile or tablet
-            var screenWidth = await JSRuntime.InvokeAsync<int>("eval", "window.innerWidth");
-            
-            if (screenWidth <= 768)
-            {
-                // On mobile/small tablet, start with sidebar collapsed
-                SidebarService.CollapseSidebar();
-            }
-            else
-            {
-                // On desktop/large tablet, start with sidebar expanded
-                SidebarService.ExpandSidebar();
-            }
+            // Always start with sidebar collapsed regardless of screen size
+            // Users must click the hamburger menu to show the sidebar
+            SidebarService.CollapseSidebar();
         }
         catch
         {
@@ -111,19 +101,20 @@
         box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(10px);
+        transform: translateX(-100%); /* Hidden by default */
     }
 
-    .sidebar.collapsed {
-        transform: translateX(-100%);
+    .sidebar:not(.collapsed) {
+        transform: translateX(0); /* Show when not collapsed */
     }
 
     .main-content {
         flex: 1;
-        margin-left: 280px;
+        margin-left: 0; /* Always start with no margin */
         display: flex;
         flex-direction: column;
         min-height: 100vh;
-        width: calc(100vw - 280px);
+        width: 100vw; /* Always full width by default */
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         overflow: hidden;
     }
@@ -141,8 +132,8 @@
         height: 100vh;
         background: rgba(0, 0, 0, 0.6);
         z-index: 1000;
-        opacity: 0;
-        visibility: hidden;
+        opacity: 1;
+        visibility: visible;
         transition: all 0.3s ease;
         backdrop-filter: blur(2px);
     }
@@ -176,21 +167,6 @@
     @@media (max-width: 768px) {
         .sidebar {
             width: 280px;
-            transform: translateX(-100%);
-        }
-
-        .sidebar:not(.collapsed) {
-            transform: translateX(0);
-        }
-
-        .main-content {
-            margin-left: 0;
-            width: 100vw;
-        }
-
-        .sidebar-overlay {
-            opacity: 1;
-            visibility: visible;
         }
 
         .content {
