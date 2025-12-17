@@ -327,10 +327,22 @@ api-publish/
 web-publish/
 dist/
 out/
-public/
 
 # Vercel
 .vercel
+public/
+
+# But keep the root web files for Vercel deployment
+!index.html
+!appsettings*.json
+!ChartJsBlazorInterop.js
+!_framework/
+!_content/
+!css/
+!js/
+!icons/
+!images/
+!documents/
 
 # Portfolio-specific ignores
 *.md.backup

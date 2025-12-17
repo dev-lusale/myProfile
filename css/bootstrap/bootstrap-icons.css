@@ -1,0 +1,23 @@
+/* Bootstrap Icons CSS - Placeholder */
+/* In production, you would include the actual Bootstrap Icons CSS file */
+/* For now, we'll use basic icon styling */
+
+.bi {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    fill: currentcolor;
+    vertical-align: -0.125em;
+}
+
+/* Basic icon placeholders */
+.bi-house-door-fill-nav-menu::before { content: "🏠"; }
+.bi-person-fill::before { content: "👤"; }
+.bi-gear-fill::before { content: "⚙️"; }
+.bi-folder-fill::before { content: "📁"; }
+.bi-briefcase-fill::before { content: "💼"; }
+.bi-envelope-fill::before { content: "✉️"; }
+.bi-github::before { content: "🔗"; }
+.bi-box-arrow-up-right::before { content: "↗️"; }
+.bi-eye::before { content: "👁️"; }
+.bi-hand-index::before { content: "👆"; }

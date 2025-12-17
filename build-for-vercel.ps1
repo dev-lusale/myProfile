@@ -18,15 +18,10 @@ if ($LASTEXITCODE -eq 0) {
     if (Test-Path "dist/wwwroot") {
         Write-Host "Preparing files for Vercel..." -ForegroundColor Blue
         
-        # Create public directory (Vercel expects this)
-        if (-not (Test-Path "public")) {
-            New-Item -ItemType Directory -Path "public" | Out-Null
-        }
+        # Copy all files from wwwroot to root directory for Vercel
+        Copy-Item -Path "dist/wwwroot/*" -Destination "." -Recurse -Force
         
-        # Copy all files from wwwroot to public
-        Copy-Item -Path "dist/wwwroot/*" -Destination "public/" -Recurse -Force
-        
-        Write-Host "Files prepared in 'public' directory" -ForegroundColor Green
+        Write-Host "Files prepared in root directory" -ForegroundColor Green
         Write-Host ""
         Write-Host "Ready for Vercel deployment!" -ForegroundColor Green
         Write-Host "Run: vercel --prod" -ForegroundColor Yellow

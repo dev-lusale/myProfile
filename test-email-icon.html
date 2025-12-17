@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Icon Test</title>
+    <style>
+        .test-container {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .icon-test {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .icon-original {
+            width: 24px;
+            height: 24px;
+        }
+        .icon-white {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1);
+            background: #667eea;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .icon-colored {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) saturate(100%) invert(42%) sepia(93%) saturate(1352%) hue-rotate(223deg) brightness(99%) contrast(107%);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Email Icon Test</h1>
+        
+        <div class="icon-test">
+            <img src="/icons/email.svg" alt="Email Original" class="icon-original" />
+            <span>Original Email Icon</span>
+        </div>
+        
+        <div class="icon-test">
+            <img src="/icons/email.svg" alt="Email White" class="icon-white" />
+            <span>White Email Icon (with blue background)</span>
+        </div>
+        
+        <div class="icon-test">
+            <img src="/icons/email.svg" alt="Email Colored" class="icon-colored" />
+            <span>Colored Email Icon</span>
+        </div>
+        
+        <div class="icon-test">
+            <a href="mailto:bernardlusale20@gmail.com" style="text-decoration: none; color: inherit;">
+                <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; color: white;">
+                    <img src="/icons/email.svg" alt="Email" style="width: 20px; height: 20px; filter: brightness(0) invert(1);" />
+                    <span>bernardlusale20@gmail.com</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
