@@ -330,7 +330,7 @@ out/
 
 # Vercel
 .vercel
-public/
+# public/ - Allow public directory for Vercel deployment
 
 # But keep the root web files for Vercel deployment
 !index.html
