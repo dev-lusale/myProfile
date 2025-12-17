@@ -1,0 +1,52 @@
+@page "/test"
+
+<PageTitle>Test Page - Portfolio</PageTitle>
+
+<div style="padding: 2rem; text-align: center;">
+    <h1>Test Page Working!</h1>
+    <p>If you can see this, the basic routing and rendering is working.</p>
+    
+    <div style="margin: 2rem 0;">
+        <h2>API Test</h2>
+        <p>Skills Count: @skillsCount</p>
+        <p>API Status: @apiStatus</p>
+    </div>
+    
+    <div style="margin: 2rem 0;">
+        <a href="/" style="padding: 1rem; background: #007bff; color: white; text-decoration: none; border-radius: 4px;">
+            Back to Home
+        </a>
+    </div>
+</div>
+
+@code {
+    private int skillsCount = 0;
+    private string apiStatus = "Loading...";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Test API connection
+            using var http = new HttpClient();
+            http.BaseAddress = new Uri("http://localhost:5001/");
+            
+            var response = await http.GetAsync("api/skills");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var skills = System.Text.Json.JsonSerializer.Deserialize<List<object>>(content);
+                skillsCount = skills?.Count ?? 0;
+                apiStatus = "Connected ✅";
+            }
+            else
+            {
+                apiStatus = $"Failed: {response.StatusCode}";
+            }
+        }
+        catch (Exception ex)
+        {
+            apiStatus = $"Error: {ex.Message}";
+        }
+    }
+}

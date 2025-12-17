@@ -1,0 +1,570 @@
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+
+<section class="trending-projects">
+    <div class="section-header">
+        <h2 class="section-title">Trending Projects</h2>
+        <p class="section-subtitle">Discover popular projects from professional development communities</p>
+        <div class="source-tabs">
+            <button class="tab-button @(activeSource == "github" ? "active" : "")" @onclick="@(() => SetActiveSource("github"))">
+                <img src="/icons/github.svg" alt="GitHub" class="tab-icon" />
+                GitHub
+            </button>
+            <button class="tab-button @(activeSource == "dev" ? "active" : "")" @onclick="@(() => SetActiveSource("dev"))">
+                <div class="tab-icon dev-icon">DEV</div>
+                Dev.to
+            </button>
+            <button class="tab-button @(activeSource == "portfolio" ? "active" : "")" @onclick="@(() => SetActiveSource("portfolio"))">
+                <img src="/icons/projects.svg" alt="Portfolio" class="tab-icon" />
+                My Projects
+            </button>
+        </div>
+    </div>
+
+    <div class="projects-container">
+        @if (isLoading)
+        {
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Loading trending projects...</p>
+            </div>
+        }
+        else
+        {
+            <div class="projects-grid">
+                @foreach (var project in displayedProjects)
+                {
+                    <div class="trending-project-card" @onclick="@(() => OpenProject(project.Url))">
+                        <div class="project-header">
+                            <div class="project-source">
+                                @if (project.Source == "github")
+                                {
+                                    <img src="/icons/github.svg" alt="GitHub" class="source-icon" />
+                                }
+                                else if (project.Source == "dev")
+                                {
+                                    <div class="source-icon dev-icon-small">DEV</div>
+                                }
+                                else
+                                {
+                                    <img src="/icons/projects.svg" alt="Portfolio" class="source-icon" />
+                                }
+                                <span class="source-label">@project.Source.ToUpper()</span>
+                            </div>
+                            <div class="project-stats">
+                                <span class="stat">
+                                    <i class="stat-icon">⭐</i>
+                                    @project.Stars
+                                </span>
+                                <span class="stat">
+                                    <i class="stat-icon">👁️</i>
+                                    @project.Views
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="project-content">
+                            <h3 class="project-title">@project.Title</h3>
+                            <p class="project-description">@project.Description</p>
+                            
+                            <div class="project-tech">
+                                @foreach (var tech in project.Technologies.Take(3))
+                                {
+                                    <span class="tech-tag">@tech</span>
+                                }
+                                @if (project.Technologies.Count > 3)
+                                {
+                                    <span class="tech-tag more">+@(project.Technologies.Count - 3)</span>
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="project-footer">
+                            <div class="project-author">
+                                <div class="author-avatar">
+                                    <img src="@project.AuthorAvatar" alt="@project.Author" />
+                                </div>
+                                <span class="author-name">@project.Author</span>
+                            </div>
+                            <div class="project-date">@project.UpdatedAt.ToString("MMM dd")</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    private string activeSource = "github";
+    private bool isLoading = true;
+    private List<TrendingProject> allProjects = new();
+    private List<TrendingProject> displayedProjects = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTrendingProjects();
+    }
+
+    private async Task LoadTrendingProjects()
+    {
+        isLoading = true;
+        StateHasChanged();
+
+        // Simulate loading trending projects from various sources
+        await Task.Delay(1000);
+
+        allProjects = new List<TrendingProject>
+        {
+            // GitHub trending projects
+            new TrendingProject
+            {
+                Title = "React Native Elements",
+                Description = "Cross-Platform React Native UI Toolkit - A complete UI library for React Native applications",
+                Author = "react-native-elements",
+                AuthorAvatar = "https://avatars.githubusercontent.com/u/13142323?s=40&v=4",
+                Source = "github",
+                Url = "https://github.com/react-native-elements/react-native-elements",
+                Stars = "24.5k",
+                Views = "1.2M",
+                Technologies = new List<string> { "React Native", "JavaScript", "TypeScript", "UI/UX" },
+                UpdatedAt = DateTime.Now.AddDays(-2)
+            },
+            new TrendingProject
+            {
+                Title = "Next.js Commerce",
+                Description = "An all-in-one starter kit for high-performance e-commerce sites built with Next.js",
+                Author = "vercel",
+                AuthorAvatar = "https://avatars.githubusercontent.com/u/14985020?s=40&v=4",
+                Source = "github",
+                Url = "https://github.com/vercel/commerce",
+                Stars = "8.9k",
+                Views = "456K",
+                Technologies = new List<string> { "Next.js", "React", "TypeScript", "Commerce" },
+                UpdatedAt = DateTime.Now.AddDays(-1)
+            },
+            new TrendingProject
+            {
+                Title = "Supabase",
+                Description = "The open source Firebase alternative. Build a backend in less than 2 minutes",
+                Author = "supabase",
+                AuthorAvatar = "https://avatars.githubusercontent.com/u/54469796?s=40&v=4",
+                Source = "github",
+                Url = "https://github.com/supabase/supabase",
+                Stars = "67.2k",
+                Views = "2.1M",
+                Technologies = new List<string> { "PostgreSQL", "JavaScript", "TypeScript", "Backend" },
+                UpdatedAt = DateTime.Now.AddHours(-6)
+            },
+            // Dev.to trending articles
+            new TrendingProject
+            {
+                Title = "Building Modern Web Apps with .NET 9",
+                Description = "A comprehensive guide to building scalable web applications using the latest .NET 9 features",
+                Author = "dotnet-dev",
+                AuthorAvatar = "https://res.cloudinary.com/practicaldev/image/fetch/s--pcSkTMZL--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/organization/profile_image/1/0213bbaa-d5a1-4d25-9e7a-10c30b455af0.png",
+                Source = "dev",
+                Url = "https://dev.to/dotnet/building-modern-web-apps-with-net-9",
+                Stars = "1.2k",
+                Views = "45K",
+                Technologies = new List<string> { ".NET 9", "C#", "Blazor", "ASP.NET Core" },
+                UpdatedAt = DateTime.Now.AddDays(-3)
+            },
+            new TrendingProject
+            {
+                Title = "Mastering Blazor WebAssembly",
+                Description = "Learn how to build interactive web UIs using C# instead of JavaScript with Blazor WebAssembly",
+                Author = "blazor-expert",
+                AuthorAvatar = "https://res.cloudinary.com/practicaldev/image/fetch/s--pcSkTMZL--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/123456/avatar.png",
+                Source = "dev",
+                Url = "https://dev.to/blazor-expert/mastering-blazor-webassembly",
+                Stars = "892",
+                Views = "32K",
+                Technologies = new List<string> { "Blazor", "WebAssembly", "C#", "Frontend" },
+                UpdatedAt = DateTime.Now.AddDays(-5)
+            },
+            // Portfolio projects
+            new TrendingProject
+            {
+                Title = "Enterprise E-Commerce Platform",
+                Description = "A comprehensive e-commerce solution featuring real-time inventory management, payment processing, order tracking, and admin dashboard. Built with microservices architecture for scalability.",
+                Author = "Bernard Lusale",
+                AuthorAvatar = "/images/dk.jpg",
+                Source = "portfolio",
+                Url = "https://github.com/bernardlusale/ecommerce-platform",
+                Stars = "234",
+                Views = "12.5K",
+                Technologies = new List<string> { "ASP.NET Core", "Blazor", "SQL Server", "Azure", "Docker" },
+                UpdatedAt = DateTime.Now.AddDays(-8)
+            },
+            new TrendingProject
+            {
+                Title = "Real-Time Collaboration Hub",
+                Description = "A modern team collaboration platform with real-time messaging, file sharing, video conferencing integration, and project management tools with SignalR.",
+                Author = "Bernard Lusale",
+                AuthorAvatar = "/images/dk.jpg",
+                Source = "portfolio",
+                Url = "https://github.com/bernardlusale/collaboration-hub",
+                Stars = "187",
+                Views = "9.8K",
+                Technologies = new List<string> { "ASP.NET Core", "React", "TypeScript", "SignalR", "PostgreSQL" },
+                UpdatedAt = DateTime.Now.AddDays(-12)
+            },
+            new TrendingProject
+            {
+                Title = "Healthcare Management System",
+                Description = "Comprehensive healthcare management solution for clinics and hospitals with patient records, appointment scheduling, billing, and telemedicine capabilities.",
+                Author = "Bernard Lusale",
+                AuthorAvatar = "/images/dk.jpg",
+                Source = "portfolio",
+                Url = "https://github.com/bernardlusale/healthcare-system",
+                Stars = "156",
+                Views = "7.2K",
+                Technologies = new List<string> { "Blazor Server", "C#", "SQL Server", "Azure AD", "FHIR" },
+                UpdatedAt = DateTime.Now.AddDays(-20)
+            },
+            new TrendingProject
+            {
+                Title = "Financial Analytics Dashboard",
+                Description = "Advanced financial analytics platform with real-time data visualization, portfolio management, risk assessment tools, and integration with financial data providers.",
+                Author = "Bernard Lusale",
+                AuthorAvatar = "/images/dk.jpg",
+                Source = "portfolio",
+                Url = "https://github.com/bernardlusale/financial-analytics",
+                Stars = "143",
+                Views = "6.8K",
+                Technologies = new List<string> { "Blazor WebAssembly", "C#", "PostgreSQL", "Chart.js", "Azure Functions" },
+                UpdatedAt = DateTime.Now.AddDays(-25)
+            }
+        };
+
+        FilterProjectsBySource();
+        isLoading = false;
+        StateHasChanged();
+    }
+
+    private void SetActiveSource(string source)
+    {
+        activeSource = source;
+        FilterProjectsBySource();
+    }
+
+    private void FilterProjectsBySource()
+    {
+        displayedProjects = allProjects.Where(p => p.Source == activeSource).ToList();
+    }
+
+    private async Task OpenProject(string url)
+    {
+        await JSRuntime.InvokeVoidAsync("open", url, "_blank");
+    }
+
+    public class TrendingProject
+    {
+        public string Title { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string Author { get; set; } = "";
+        public string AuthorAvatar { get; set; } = "";
+        public string Source { get; set; } = "";
+        public string Url { get; set; } = "";
+        public string Stars { get; set; } = "0";
+        public string Views { get; set; } = "0";
+        public List<string> Technologies { get; set; } = new();
+        public DateTime UpdatedAt { get; set; }
+    }
+}
+
+<style>
+    .trending-projects {
+        margin: 2rem 0;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .section-subtitle {
+        font-size: 1.1rem;
+        color: #6c757d;
+        margin-bottom: 2rem;
+    }
+
+    .source-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .tab-button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .tab-button:hover {
+        border-color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    }
+
+    .tab-button.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: transparent;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .tab-icon {
+        width: 20px;
+        height: 20px;
+        filter: brightness(0) saturate(100%) invert(45%) sepia(7%) saturate(1190%) hue-rotate(202deg) brightness(99%) contrast(85%);
+    }
+
+    .tab-button.active .tab-icon {
+        filter: brightness(0) invert(1);
+    }
+
+    .dev-icon {
+        background: #0a0a0a;
+        color: white;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.7rem;
+        font-weight: 700;
+    }
+
+    .tab-button.active .dev-icon {
+        background: white;
+        color: #667eea;
+    }
+
+    .loading-state {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #e9ecef;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .trending-project-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .trending-project-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .trending-project-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .trending-project-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .project-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .project-source {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .source-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .dev-icon-small {
+        background: #0a0a0a;
+        color: white;
+        border-radius: 3px;
+        padding: 1px 4px;
+        font-size: 0.6rem;
+        font-weight: 700;
+    }
+
+    .source-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .project-stats {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .stat {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+
+    .stat-icon {
+        font-size: 0.7rem;
+    }
+
+    .project-content {
+        margin-bottom: 1.5rem;
+    }
+
+    .project-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #212529;
+        line-height: 1.3;
+    }
+
+    .project-description {
+        color: #6c757d;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .project-tech {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .tech-tag {
+        background: #f8f9fa;
+        color: #495057;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        border: 1px solid #e9ecef;
+    }
+
+    .tech-tag.more {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-color: transparent;
+    }
+
+    .project-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .project-author {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .author-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .author-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .author-name {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .project-date {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+
+    @@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @@media (max-width: 768px) {
+        .projects-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .source-tabs {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tab-button {
+            width: 200px;
+            justify-content: center;
+        }
+    }
+</style>

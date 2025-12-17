@@ -1,0 +1,188 @@
+@using Portfolio.Shared.Models
+
+<div class="project-card" @onclick="() => OnProjectClick.InvokeAsync(Project)">
+    <div class="project-image">
+        @if (!string.IsNullOrEmpty(Project.ImageUrl))
+        {
+            <img src="@Project.ImageUrl" alt="@Project.Title" />
+        }
+        else
+        {
+            <div class="placeholder-image">
+                <i class="bi bi-folder"></i>
+            </div>
+        }
+    </div>
+    
+    <div class="project-content">
+        <h4 class="project-title">@Project.Title</h4>
+        <p class="project-description">@Project.Description</p>
+        
+        <div class="tech-stack">
+            @foreach (var tech in Project.TechStack.Take(3))
+            {
+                <span class="tech-badge">@tech</span>
+            }
+            @if (Project.TechStack.Count > 3)
+            {
+                <span class="tech-badge more">+@(Project.TechStack.Count - 3)</span>
+            }
+        </div>
+        
+        <div class="project-actions">
+            @if (!string.IsNullOrEmpty(Project.GitHubUrl))
+            {
+                <a href="@Project.GitHubUrl" target="_blank" class="action-link" @onclick:stopPropagation="true">
+                    <img src="/icons/github.svg" alt="GitHub" class="action-icon" /> Code
+                </a>
+            }
+            @if (!string.IsNullOrEmpty(Project.LiveDemoUrl))
+            {
+                <a href="@Project.LiveDemoUrl" target="_blank" class="action-link" @onclick:stopPropagation="true">
+                    <img src="/icons/external-link.svg" alt="Demo" class="action-icon" /> Demo
+                </a>
+            }
+        </div>
+        
+        <div class="project-stats">
+            <span class="stat">
+                <i class="bi bi-eye"></i> @Project.ViewCount
+            </span>
+            <span class="stat">
+                <i class="bi bi-hand-index"></i> @Project.ClickCount
+            </span>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Project Project { get; set; } = new();
+    [Parameter] public EventCallback<Project> OnProjectClick { get; set; }
+}
+
+<style>
+    .project-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .project-image {
+        height: 200px;
+        overflow: hidden;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .project-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .placeholder-image {
+        font-size: 3rem;
+        color: #6c757d;
+    }
+
+    .project-content {
+        padding: 1.5rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #212529;
+    }
+
+    .project-description {
+        color: #6c757d;
+        margin-bottom: 1rem;
+        flex: 1;
+        line-height: 1.5;
+    }
+
+    .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .tech-badge {
+        background: #e9ecef;
+        color: #495057;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .tech-badge.more {
+        background: #667eea;
+        color: white;
+    }
+
+    .project-actions {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .action-link {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+
+    .action-link:hover {
+        color: #5a6fd8;
+        transform: translateY(-1px);
+    }
+
+    .action-icon {
+        width: 16px;
+        height: 16px;
+        filter: brightness(0) saturate(100%) invert(42%) sepia(93%) saturate(1352%) hue-rotate(223deg) brightness(99%) contrast(107%);
+    }
+
+    .action-link:hover .action-icon {
+        filter: brightness(0) saturate(100%) invert(35%) sepia(93%) saturate(1352%) hue-rotate(223deg) brightness(99%) contrast(107%);
+    }
+
+    .project-stats {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-top: auto;
+    }
+
+    .stat {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+</style>

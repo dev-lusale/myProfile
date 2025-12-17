@@ -1,0 +1,294 @@
+@page "/projects"
+@inject IAnalyticsService AnalyticsService
+
+<PageTitle>Projects - Portfolio</PageTitle>
+
+<div class="projects-container">
+    <div class="projects-header">
+        <h1>My Projects</h1>
+        <p class="lead">A showcase of my cybersecurity and development work</p>
+    </div>
+
+    <div class="projects-grid">
+        <div class="project-card">
+            <div class="project-header">
+                <h3>Aquafy - Water Quality Management System</h3>
+                <div class="project-links">
+                    <a href="https://github.com/bernardlusale/aquafy" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+            <p class="project-description">
+                A comprehensive water quality monitoring and management system designed to track, analyze, and report on water quality parameters. 
+                Features real-time data collection, automated alerts for quality thresholds, comprehensive reporting dashboard, and mobile access for field technicians.
+            </p>
+            <div class="tech-stack">
+                <span class="tech-tag">ASP.NET Core</span>
+                <span class="tech-tag">Blazor</span>
+                <span class="tech-tag">C#</span>
+                <span class="tech-tag">SQL Server</span>
+                <span class="tech-tag">Entity Framework</span>
+                <span class="tech-tag">Bootstrap</span>
+                <span class="tech-tag">Chart.js</span>
+                <span class="tech-tag">SignalR</span>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-header">
+                <h3>Portfolio Website</h3>
+                <div class="project-links">
+                    <a href="https://github.com/bernardlusale/portfolio" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-github"></i> GitHub
+                    </a>
+                    <a href="https://bernardlusale.dev" target="_blank" class="btn btn-outline-success btn-sm">
+                        <i class="bi bi-globe"></i> Live Demo
+                    </a>
+                </div>
+            </div>
+            <p class="project-description">
+                A modern, responsive portfolio website showcasing my skills, projects, and professional experience. 
+                Built with .NET MAUI Blazor for cross-platform compatibility, featuring both web and mobile versions. 
+                Includes dynamic content management, contact forms, and analytics tracking.
+            </p>
+            <div class="tech-stack">
+                <span class="tech-tag">ASP.NET Core</span>
+                <span class="tech-tag">.NET MAUI</span>
+                <span class="tech-tag">Blazor</span>
+                <span class="tech-tag">C#</span>
+                <span class="tech-tag">SQL Server</span>
+                <span class="tech-tag">Entity Framework</span>
+                <span class="tech-tag">Bootstrap</span>
+                <span class="tech-tag">JavaScript</span>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-header">
+                <h3>Cybersecurity Assessment Tool</h3>
+                <div class="project-links">
+                    <a href="https://github.com/bernardlusale/security-assessment" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+            <p class="project-description">
+                A web-based security assessment tool developed during my cybersecurity internship. 
+                Features vulnerability scanning, security report generation, and compliance checking. 
+                Includes automated testing capabilities and detailed security recommendations for web applications.
+            </p>
+            <div class="tech-stack">
+                <span class="tech-tag">C#</span>
+                <span class="tech-tag">ASP.NET Core</span>
+                <span class="tech-tag">Blazor</span>
+                <span class="tech-tag">SQL Server</span>
+                <span class="tech-tag">Burp Suite API</span>
+                <span class="tech-tag">Nmap</span>
+                <span class="tech-tag">Security Testing</span>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-header">
+                <h3>Student Management System</h3>
+                <div class="project-links">
+                    <a href="https://github.com/bernardlusale/student-management" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+            <p class="project-description">
+                A comprehensive student information system for educational institutions. 
+                Features student enrollment, grade management, attendance tracking, and parent portal. 
+                Built with modern web technologies and includes role-based access control for different user types.
+            </p>
+            <div class="tech-stack">
+                <span class="tech-tag">ASP.NET Core</span>
+                <span class="tech-tag">Blazor Server</span>
+                <span class="tech-tag">C#</span>
+                <span class="tech-tag">SQL Server</span>
+                <span class="tech-tag">Entity Framework</span>
+                <span class="tech-tag">Bootstrap</span>
+                <span class="tech-tag">Identity Framework</span>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-header">
+                <h3>API Testing Framework</h3>
+                <div class="project-links">
+                    <a href="https://github.com/bernardlusale/api-testing-framework" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+            <p class="project-description">
+                A custom API testing framework developed to automate REST API testing and validation. 
+                Features automated test generation, response validation, performance testing, and comprehensive reporting. 
+                Used for testing web applications and microservices.
+            </p>
+            <div class="tech-stack">
+                <span class="tech-tag">C#</span>
+                <span class="tech-tag">.NET Core</span>
+                <span class="tech-tag">xUnit</span>
+                <span class="tech-tag">Postman</span>
+                <span class="tech-tag">REST APIs</span>
+                <span class="tech-tag">JSON</span>
+                <span class="tech-tag">HTTP Client</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await AnalyticsService.TrackPageViewAsync("/projects", "Projects");
+    }
+}
+
+<style>
+    .projects-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .projects-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .projects-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .lead {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+    }
+
+    .project-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: 1px solid #e9ecef;
+    }
+
+    .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .project-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .project-header h3 {
+        margin: 0;
+        color: #333;
+        font-size: 1.3rem;
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .project-links {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .project-description {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .tech-tag {
+        background: #e9ecef;
+        color: #495057;
+        padding: 0.3rem 0.7rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .tech-tag:hover {
+        background: #6c757d;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    .btn {
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        border: 1px solid;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .btn-outline-primary {
+        color: #667eea;
+        border-color: #667eea;
+        background: transparent;
+    }
+
+    .btn-outline-primary:hover {
+        background: #667eea;
+        color: white;
+    }
+
+    .btn-outline-success {
+        color: #28a745;
+        border-color: #28a745;
+        background: transparent;
+    }
+
+    .btn-outline-success:hover {
+        background: #28a745;
+        color: white;
+    }
+
+    @@media (max-width: 768px) {
+        .projects-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .project-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .project-links {
+            width: 100%;
+        }
+    }
+</style>

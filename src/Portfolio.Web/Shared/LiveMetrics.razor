@@ -1,0 +1,88 @@
+@inject IApiService ApiService
+@implements IDisposable
+
+<div class="live-metrics">
+    <div class="metrics-container">
+        <div class="metric">
+            <span class="metric-value">@metrics.TotalVisitors</span>
+            <span class="metric-label">Total Visitors</span>
+        </div>
+        <div class="metric">
+            <span class="metric-value">@metrics.ActiveSessions</span>
+            <span class="metric-label">Active Sessions</span>
+        </div>
+        <div class="metric">
+            <span class="metric-value">@metrics.TotalProjectViews</span>
+            <span class="metric-label">Project Views</span>
+        </div>
+    </div>
+</div>
+
+@code {
+    private DashboardMetricsDto metrics = new();
+    private Timer? refreshTimer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadMetrics();
+        
+        // Refresh metrics every 30 seconds
+        refreshTimer = new Timer(async _ => await InvokeAsync(LoadMetrics), null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
+    }
+
+    private async Task LoadMetrics()
+    {
+        try
+        {
+            metrics = await ApiService.GetDashboardMetricsAsync();
+            StateHasChanged();
+        }
+        catch
+        {
+            // Silently handle errors
+        }
+    }
+
+    public void Dispose()
+    {
+        refreshTimer?.Dispose();
+    }
+}
+
+<style>
+    .live-metrics {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .metrics-container {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+    }
+
+    .metric {
+        text-align: center;
+    }
+
+    .metric-value {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .metric-label {
+        font-size: 0.8rem;
+        opacity: 0.9;
+    }
+
+    @@media (max-width: 768px) {
+        .metrics-container {
+            flex-direction: column;
+            gap: 1rem;
+        }
+    }
+</style>

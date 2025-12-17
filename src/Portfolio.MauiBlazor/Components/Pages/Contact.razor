@@ -1,0 +1,141 @@
+@page "/contact"
+@using Portfolio.Shared.Components
+@using Portfolio.Shared.DTOs
+@inject IApiService ApiService
+
+<PageTitle>Contact - Bernard Lusale</PageTitle>
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="display-4 text-primary mb-4">Get In Touch</h1>
+            <p class="lead mb-5">I'd love to hear from you. Send me a message and I'll respond as soon as possible.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Send Message</h5>
+                    
+                    @if (!string.IsNullOrEmpty(statusMessage))
+                    {
+                        <div class="alert @(isSuccess ? "alert-success" : "alert-danger")" role="alert">
+                            @statusMessage
+                        </div>
+                    }
+
+                    <EditForm Model="contactForm" OnValidSubmit="HandleSubmit">
+                        <DataAnnotationsValidator />
+                        
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name *</label>
+                            <InputText id="name" class="form-control" @bind-Value="contactForm.Name" />
+                            <ValidationMessage For="@(() => contactForm.Name)" class="text-danger" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email *</label>
+                            <InputText id="email" type="email" class="form-control" @bind-Value="contactForm.Email" />
+                            <ValidationMessage For="@(() => contactForm.Email)" class="text-danger" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Subject *</label>
+                            <InputText id="subject" class="form-control" @bind-Value="contactForm.Subject" />
+                            <ValidationMessage For="@(() => contactForm.Subject)" class="text-danger" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message *</label>
+                            <InputTextArea id="message" class="form-control" rows="5" @bind-Value="contactForm.Message" />
+                            <ValidationMessage For="@(() => contactForm.Message)" class="text-danger" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" disabled="@isSubmitting">
+                            @if (isSubmitting)
+                            {
+                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                <span>Sending...</span>
+                            }
+                            else
+                            {
+                                <i class="bi bi-send me-2"></i>
+                                <span>Send Message</span>
+                            }
+                        </button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Contact Information</h5>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item mb-3">
+                            <i class="bi bi-envelope-fill text-primary me-3"></i>
+                            <span>bernard.lusale@example.com</span>
+                        </div>
+                        
+                        <div class="contact-item mb-3">
+                            <i class="bi bi-geo-alt-fill text-primary me-3"></i>
+                            <span>Available for remote work</span>
+                        </div>
+                        
+                        <div class="contact-item mb-4">
+                            <i class="bi bi-clock-fill text-primary me-3"></i>
+                            <span>Response within 24 hours</span>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-3">Connect with me</h6>
+                    <SocialLinks />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private ContactDto contactForm = new();
+    private string statusMessage = string.Empty;
+    private bool isSuccess = false;
+    private bool isSubmitting = false;
+
+    private async Task HandleSubmit()
+    {
+        isSubmitting = true;
+        statusMessage = string.Empty;
+
+        try
+        {
+            var success = await ApiService.SendContactMessageAsync(contactForm);
+            
+            if (success)
+            {
+                statusMessage = "Thank you for your message! I'll get back to you soon.";
+                isSuccess = true;
+                contactForm = new ContactDto(); // Reset form
+            }
+            else
+            {
+                statusMessage = "There was an error sending your message. Please try again.";
+                isSuccess = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            statusMessage = "There was an error sending your message. Please try again.";
+            isSuccess = false;
+            Console.WriteLine($"Error sending contact message: {ex.Message}");
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+}

@@ -1,0 +1,264 @@
+@page "/skills"
+@inject IAnalyticsService AnalyticsService
+
+<PageTitle>Skills - Portfolio</PageTitle>
+
+<div class="skills-container">
+    <div class="skills-header">
+        <h1>Skills & Technologies</h1>
+        <p class="lead">My technical expertise in cybersecurity and software development</p>
+    </div>
+
+    <div class="skills-filter">
+        <button class="filter-btn @(selectedCategory == "All" ? "active" : "")" 
+                @onclick="@(() => FilterSkills("All"))">All</button>
+        <button class="filter-btn @(selectedCategory == "Programming Languages" ? "active" : "")" 
+                @onclick="@(() => FilterSkills("Programming Languages"))">Programming Languages</button>
+        <button class="filter-btn @(selectedCategory == ".NET Ecosystem" ? "active" : "")" 
+                @onclick="@(() => FilterSkills(".NET Ecosystem"))">.NET Ecosystem</button>
+        <button class="filter-btn @(selectedCategory == "Cybersecurity" ? "active" : "")" 
+                @onclick="@(() => FilterSkills("Cybersecurity"))">Cybersecurity</button>
+        <button class="filter-btn @(selectedCategory == "Cybersecurity Tools" ? "active" : "")" 
+                @onclick="@(() => FilterSkills("Cybersecurity Tools"))">Security Tools</button>
+        <button class="filter-btn @(selectedCategory == "Web & App Development" ? "active" : "")" 
+                @onclick="@(() => FilterSkills("Web & App Development"))">Web Development</button>
+        <button class="filter-btn @(selectedCategory == "Database & SQL" ? "active" : "")" 
+                @onclick="@(() => FilterSkills("Database & SQL"))">Database</button>
+        <button class="filter-btn @(selectedCategory == "Development Tools" ? "active" : "")" 
+                @onclick="@(() => FilterSkills("Development Tools"))">Dev Tools</button>
+    </div>
+
+    <div class="skills-grid">
+        @foreach (var skill in filteredSkills)
+        {
+            <div class="skill-card">
+                <div class="skill-header">
+                    <h3>@skill.Name</h3>
+                    <span class="skill-category">@skill.Category</span>
+                </div>
+                <div class="skill-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: @(skill.ProficiencyLevel * 10)%"></div>
+                    </div>
+                    <span class="progress-text">@skill.ProficiencyLevel/10</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<SkillModel> allSkills = new();
+    private List<SkillModel> filteredSkills = new();
+    private string selectedCategory = "All";
+
+    public class SkillModel
+    {
+        public string Name { get; set; } = "";
+        public string Category { get; set; } = "";
+        public int ProficiencyLevel { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        InitializeSkills();
+        FilterSkills("All");
+        await AnalyticsService.TrackPageViewAsync("/skills", "Skills");
+    }
+
+    private void InitializeSkills()
+    {
+        allSkills = new List<SkillModel>
+        {
+            // Programming Languages
+            new SkillModel { Name = "C++", Category = "Programming Languages", ProficiencyLevel = 8 },
+            new SkillModel { Name = "C#", Category = "Programming Languages", ProficiencyLevel = 9 },
+            new SkillModel { Name = "Python", Category = "Programming Languages", ProficiencyLevel = 6 },
+            
+            // .NET Ecosystem
+            new SkillModel { Name = ".NET Framework", Category = ".NET Ecosystem", ProficiencyLevel = 9 },
+            new SkillModel { Name = ".NET Core", Category = ".NET Ecosystem", ProficiencyLevel = 9 },
+            new SkillModel { Name = ".NET MAUI", Category = ".NET Ecosystem", ProficiencyLevel = 9 },
+            new SkillModel { Name = "Blazor WebAssembly", Category = ".NET Ecosystem", ProficiencyLevel = 9 },
+            new SkillModel { Name = "Blazor Server", Category = ".NET Ecosystem", ProficiencyLevel = 9 },
+            new SkillModel { Name = "Blazor Hybrid", Category = ".NET Ecosystem", ProficiencyLevel = 9 },
+            
+            // Cybersecurity Skills
+            new SkillModel { Name = "Web Application Security Testing", Category = "Cybersecurity", ProficiencyLevel = 8 },
+            new SkillModel { Name = "Penetration Testing", Category = "Cybersecurity", ProficiencyLevel = 7 },
+            new SkillModel { Name = "Vulnerability Assessment", Category = "Cybersecurity", ProficiencyLevel = 8 },
+            new SkillModel { Name = "Security Incident Response", Category = "Cybersecurity", ProficiencyLevel = 7 },
+            new SkillModel { Name = "Threat Analysis", Category = "Cybersecurity", ProficiencyLevel = 7 },
+            new SkillModel { Name = "Network Security", Category = "Cybersecurity", ProficiencyLevel = 6 },
+            
+            // Cybersecurity Tools
+            new SkillModel { Name = "Wireshark", Category = "Cybersecurity Tools", ProficiencyLevel = 8 },
+            new SkillModel { Name = "Metasploit", Category = "Cybersecurity Tools", ProficiencyLevel = 7 },
+            new SkillModel { Name = "Burp Suite", Category = "Cybersecurity Tools", ProficiencyLevel = 8 },
+            new SkillModel { Name = "Nmap", Category = "Cybersecurity Tools", ProficiencyLevel = 8 },
+            new SkillModel { Name = "Fiddler", Category = "Cybersecurity Tools", ProficiencyLevel = 7 },
+            
+            // Database & SQL
+            new SkillModel { Name = "SQL Queries", Category = "Database & SQL", ProficiencyLevel = 9 },
+            new SkillModel { Name = "SQL Joins", Category = "Database & SQL", ProficiencyLevel = 9 },
+            new SkillModel { Name = "Relational Schema Design", Category = "Database & SQL", ProficiencyLevel = 8 },
+            new SkillModel { Name = "SQL Server", Category = "Database & SQL", ProficiencyLevel = 9 },
+            new SkillModel { Name = "Entity Framework Core", Category = "Database & SQL", ProficiencyLevel = 9 },
+            
+            // Web & App Development
+            new SkillModel { Name = "Blazor Components", Category = "Web & App Development", ProficiencyLevel = 9 },
+            new SkillModel { Name = "Responsive UI Design", Category = "Web & App Development", ProficiencyLevel = 8 },
+            new SkillModel { Name = "MVVM Architecture", Category = "Web & App Development", ProficiencyLevel = 8 },
+            new SkillModel { Name = "Component-based Design", Category = "Web & App Development", ProficiencyLevel = 9 },
+            new SkillModel { Name = "HTML5", Category = "Web & App Development", ProficiencyLevel = 8 },
+            new SkillModel { Name = "CSS3", Category = "Web & App Development", ProficiencyLevel = 8 },
+            new SkillModel { Name = "ASP.NET Core Web API", Category = "Web & App Development", ProficiencyLevel = 9 },
+            new SkillModel { Name = "RESTful API Design", Category = "Web & App Development", ProficiencyLevel = 9 },
+            new SkillModel { Name = "Authentication & Authorization", Category = "Web & App Development", ProficiencyLevel = 8 },
+            new SkillModel { Name = "API Integration", Category = "Web & App Development", ProficiencyLevel = 9 },
+            
+            // Development Tools
+            new SkillModel { Name = "Visual Studio", Category = "Development Tools", ProficiencyLevel = 9 },
+            new SkillModel { Name = "VS Code", Category = "Development Tools", ProficiencyLevel = 8 },
+            new SkillModel { Name = "Git", Category = "Development Tools", ProficiencyLevel = 9 },
+            new SkillModel { Name = "Linux", Category = "Development Tools", ProficiencyLevel = 7 },
+            new SkillModel { Name = "Postman", Category = "Development Tools", ProficiencyLevel = 8 }
+        };
+    }
+
+    private void FilterSkills(string category)
+    {
+        selectedCategory = category;
+        filteredSkills = category == "All" 
+            ? allSkills.OrderBy(s => s.Category).ThenBy(s => s.Name).ToList()
+            : allSkills.Where(s => s.Category == category).OrderBy(s => s.Name).ToList();
+        
+        StateHasChanged();
+    }
+}
+
+<style>
+    .skills-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .skills-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .skills-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .lead {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .skills-filter {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        padding: 0.5rem 1.5rem;
+        border: 2px solid #667eea;
+        background: transparent;
+        color: #667eea;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+        background: #667eea;
+        color: white;
+    }
+
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .skill-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .skill-card:hover {
+        transform: translateY(-4px);
+    }
+
+    .skill-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .skill-header h3 {
+        margin: 0;
+        color: #333;
+    }
+
+    .skill-category {
+        background: #e9ecef;
+        color: #495057;
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .skill-progress {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .progress-bar {
+        flex: 1;
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        transition: width 0.5s ease;
+    }
+
+    .progress-text {
+        font-weight: 600;
+        color: #667eea;
+        min-width: 40px;
+    }
+
+    @@media (max-width: 768px) {
+        .skills-filter {
+            justify-content: flex-start;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+        
+        .filter-btn {
+            white-space: nowrap;
+        }
+    }
+</style>

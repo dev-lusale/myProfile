@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  portfolio-api:
+    build:
+      context: .
+      dockerfile: src/Portfolio.Api/Dockerfile
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
+      - EmailSettings__SmtpUsername=${EMAIL_USERNAME}
+      - EmailSettings__SmtpPassword=${EMAIL_PASSWORD}
+      - EmailSettings__FromEmail=${EMAIL_FROM}
+      - EmailSettings__ToEmail=${EMAIL_TO}
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY}
+    depends_on:
+      - portfolio-db
+    networks:
+      - portfolio-network
+
+  portfolio-web:
+    build:
+      context: .
+      dockerfile: src/Portfolio.Web/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - portfolio-api
+    networks:
+      - portfolio-network
+
+  portfolio-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${DB_SA_PASSWORD}
+      - MSSQL_DB=PortfolioDb
+    ports:
+      - "1433:1433"
+    volumes:
+      - portfolio-db-data:/var/opt/mssql
+    networks:
+      - portfolio-network
+
+volumes:
+  portfolio-db-data:
+
+networks:
+  portfolio-network:
+    driver: bridge

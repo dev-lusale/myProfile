@@ -1,0 +1,119 @@
+@page "/apitest"
+@inject IApiService ApiService
+@inject HttpClient HttpClient
+
+<PageTitle>API Test</PageTitle>
+
+<h3>API Connection Test</h3>
+
+<div class="mb-3">
+    <button class="btn btn-primary" @onclick="TestDirectApi">Test Direct API Call</button>
+    <button class="btn btn-secondary" @onclick="TestApiService">Test API Service</button>
+</div>
+
+<div class="alert alert-info">
+    <h5>Test Results:</h5>
+    <pre>@testResults</pre>
+</div>
+
+@if (skills.Any())
+{
+    <div class="alert alert-success">
+        <h5>Skills Loaded (@skills.Count):</h5>
+        <ul>
+            @foreach (var skill in skills.Take(5))
+            {
+                <li>@skill.Name (@skill.Category) - Level @skill.ProficiencyLevel</li>
+            }
+        </ul>
+    </div>
+}
+
+@if (certifications.Any())
+{
+    <div class="alert alert-success">
+        <h5>Certifications Loaded (@certifications.Count):</h5>
+        <ul>
+            @foreach (var cert in certifications)
+            {
+                <li>@cert.Name - @cert.IssuingOrganization</li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    private string testResults = "";
+    private List<Portfolio.Shared.Models.Skill> skills = new();
+    private List<Portfolio.Shared.Models.Certification> certifications = new();
+
+    private async Task TestDirectApi()
+    {
+        testResults = "Testing direct API call...\n";
+        
+        try
+        {
+            var response = await HttpClient.GetAsync("api/skills");
+            testResults += $"Response Status: {response.StatusCode}\n";
+            testResults += $"Response Headers: {string.Join(", ", response.Headers.Select(h => $"{h.Key}={string.Join(",", h.Value)}"))}\n";
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                testResults += $"Content Length: {content.Length}\n";
+                testResults += $"First 200 chars: {content.Substring(0, Math.Min(200, content.Length))}\n";
+                
+                var skillsData = await response.Content.ReadFromJsonAsync<List<Portfolio.Shared.Models.Skill>>();
+                skills = skillsData ?? new List<Portfolio.Shared.Models.Skill>();
+                testResults += $"Skills parsed: {skills.Count}\n";
+            }
+        }
+        catch (Exception ex)
+        {
+            testResults += $"Error: {ex.Message}\n";
+            testResults += $"Stack: {ex.StackTrace}\n";
+        }
+        
+        StateHasChanged();
+    }
+
+    private async Task TestApiService()
+    {
+        testResults = "Testing API Service...\n";
+        
+        try
+        {
+            skills = await ApiService.GetSkillsAsync();
+            testResults += $"Skills from service: {skills.Count}\n";
+            
+            certifications = await ApiService.GetCertificationsAsync();
+            testResults += $"Certifications from service: {certifications.Count}\n";
+            
+            var experiences = await ApiService.GetExperiencesAsync();
+            testResults += $"Experiences from service: {experiences.Count}\n";
+            
+            if (skills.Any())
+            {
+                testResults += $"First skill: {skills[0].Name} ({skills[0].Category})\n";
+            }
+            
+            if (certifications.Any())
+            {
+                testResults += $"First cert: {certifications[0].Name} from {certifications[0].IssuingOrganization}\n";
+            }
+            
+            if (experiences.Any())
+            {
+                testResults += $"First experience: {experiences[0].Position} at {experiences[0].Company}\n";
+                testResults += $"Experience description: {experiences[0].Description.Substring(0, Math.Min(100, experiences[0].Description.Length))}...\n";
+                testResults += $"Technologies: {string.Join(", ", experiences[0].Technologies.Take(3))}\n";
+            }
+        }
+        catch (Exception ex)
+        {
+            testResults += $"Service Error: {ex.Message}\n";
+        }
+        
+        StateHasChanged();
+    }
+}

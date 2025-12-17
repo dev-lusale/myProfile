@@ -1,0 +1,232 @@
+@page "/experience"
+@inject IAnalyticsService AnalyticsService
+
+<PageTitle>Experience - Portfolio</PageTitle>
+
+<div class="experience-container">
+    <div class="experience-header">
+        <h1>Professional Experience</h1>
+        <p class="lead">
+            <i class="bi bi-briefcase me-2"></i>
+            My journey in cybersecurity and software development, showcasing growth, achievements, and technical expertise.
+        </p>
+    </div>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+                <div class="experience-header-info">
+                    <h3>Cybersecurity Analyst</h3>
+                    <h4>Future Interns</h4>
+                    <div class="experience-period">
+                        Jun 2024 - Present
+                    </div>
+                </div>
+                
+                <p class="experience-description">
+                    Competitive cybersecurity internship focused on protecting digital assets and enhancing security posture. 
+                    Selected based on strong foundation in cybersecurity, problem-solving skills, and passion for digital security. 
+                    Engaged in hands-on security testing and incident response activities.
+                </p>
+                
+                <div class="achievements">
+                    <h5><i class="bi bi-trophy me-2"></i>Key Achievements:</h5>
+                    <ul>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Selected for competitive cybersecurity internship based on strong technical foundation</li>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Completed Web Application Security Testing as first major project</li>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Implemented Security Alert Monitoring & Incident Response procedures</li>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Gained hands-on experience with penetration testing and vulnerability assessment</li>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Developed skills in threat analysis and security incident management</li>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Applied cybersecurity best practices in real-world scenarios</li>
+                    </ul>
+                </div>
+                
+                <div class="technologies">
+                    <h5><i class="bi bi-gear me-2"></i>Technologies Used:</h5>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Wireshark</span>
+                        <span class="tech-tag">Metasploit</span>
+                        <span class="tech-tag">Burp Suite</span>
+                        <span class="tech-tag">Nmap</span>
+                        <span class="tech-tag">Linux</span>
+                        <span class="tech-tag">Fiddler</span>
+                        <span class="tech-tag">Security Testing</span>
+                        <span class="tech-tag">Incident Response</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await AnalyticsService.TrackPageViewAsync("/experience", "Experience");
+    }
+}
+
+<style>
+    .experience-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .experience-header {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+
+    .experience-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .lead {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .timeline {
+        position: relative;
+        padding-left: 2rem;
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 1rem;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 3rem;
+    }
+
+    .timeline-marker {
+        position: absolute;
+        left: -1.5rem;
+        top: 0.5rem;
+        width: 1rem;
+        height: 1rem;
+        background: #667eea;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 0 0 3px #667eea;
+    }
+
+    .timeline-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-left: 1rem;
+    }
+
+    .experience-header-info h3 {
+        margin: 0 0 0.5rem 0;
+        color: #333;
+        font-size: 1.5rem;
+    }
+
+    .experience-header-info h4 {
+        margin: 0 0 0.5rem 0;
+        color: #667eea;
+        font-weight: 600;
+    }
+
+    .experience-period {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .experience-description {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .achievements,
+    .technologies {
+        margin-top: 1.5rem;
+    }
+
+    .achievements h5,
+    .technologies h5 {
+        margin: 0 0 0.75rem 0;
+        color: #333;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .achievements ul {
+        margin: 0;
+        padding-left: 0;
+        list-style: none;
+    }
+
+    .achievements li {
+        margin-bottom: 0.75rem;
+        color: #555;
+        padding: 0.5rem 0;
+        border-left: 3px solid transparent;
+        padding-left: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .achievements li:hover {
+        border-left-color: #28a745;
+        background-color: rgba(40, 167, 69, 0.05);
+        transform: translateX(5px);
+    }
+
+    .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .tech-tag {
+        background: #e9ecef;
+        color: #495057;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        cursor: default;
+    }
+
+    .tech-tag:hover {
+        background: #6c757d;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    @@media (max-width: 768px) {
+        .timeline {
+            padding-left: 1rem;
+        }
+
+        .timeline::before {
+            left: 0.5rem;
+        }
+
+        .timeline-marker {
+            left: -1rem;
+        }
+
+        .timeline-content {
+            margin-left: 0.5rem;
+            padding: 1.5rem;
+        }
+    }
+</style>

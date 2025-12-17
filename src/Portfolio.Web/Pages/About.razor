@@ -1,0 +1,379 @@
+@page "/about"
+@inject IAnalyticsService AnalyticsService
+@inject IJSRuntime JSRuntime
+
+<PageTitle>About - Portfolio</PageTitle>
+
+<div class="about-container">
+    <div class="about-header">
+        <div class="profile-section">
+            <img src="/images/dk.jpg" alt="Bernard Lusale" class="about-profile-image" />
+            <div class="about-text">
+                <h1>About Me</h1>
+                <p class="lead">Computer Science Student & Cybersecurity Analyst with expertise in web development and security</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-content">
+        <div class="about-section">
+            <h2>Professional Background</h2>
+            <p>
+                I'm a Computer Science student at Copperbelt University and a Cybersecurity Analyst at Future Interns. 
+                My expertise spans both cybersecurity and web development, with hands-on experience in security testing, 
+                vulnerability assessment, and building secure web applications using modern .NET technologies. 
+                I'm passionate about digital security and creating robust, secure software solutions.
+            </p>
+        </div>
+
+        <div class="about-section">
+            <h2>Education</h2>
+            
+            <div class="education-item">
+                <h3>Bachelor of Science in Computer Science</h3>
+                <p class="institution">Copperbelt University, Zambia</p>
+                <p class="duration">Expected Graduation: 2028</p>
+                <p class="description">
+                    Pursuing a comprehensive computer science degree with focus on software engineering, algorithms, data structures, and modern programming paradigms. 
+                    Coursework includes advanced topics in artificial intelligence, machine learning, database systems, and software architecture.
+                </p>
+                <ul class="achievements-list">
+                    <li>Maintained Dean's List status for academic excellence</li>
+                    <li>Active member of Computer Science Student Association</li>
+                    <li>Participated in programming competitions and hackathons</li>
+                    <li>Completed advanced coursework in software engineering and system design</li>
+                </ul>
+            </div>
+
+            <div class="education-item">
+                <h3>Secondary School Certificate</h3>
+                <p class="institution">Choma Secondary School, Zambia</p>
+                <p class="duration">Graduated: 2022</p>
+                <p class="description">
+                    Completed secondary education with strong performance in mathematics, sciences, and computer studies. 
+                    Developed foundational knowledge in analytical thinking and problem-solving that laid the groundwork for pursuing computer science.
+                </p>
+                <ul class="achievements-list">
+                    <li>Graduated with distinction in Mathematics and Computer Studies</li>
+                    <li>Served as class representative and peer tutor</li>
+                    <li>Participated in inter-school science competitions</li>
+                    <li>Completed advanced mathematics and physics coursework</li>
+                </ul>
+            </div>
+
+            <div class="education-item">
+                <h3>Junior Secondary School Certificate</h3>
+                <p class="institution">Choma Secondary School, Zambia</p>
+                <p class="duration">Graduated: 2019</p>
+                <p class="description">
+                    Completed junior secondary education with excellent academic performance. 
+                    Developed strong foundation in core subjects including mathematics, sciences, and English, which prepared for advanced secondary studies.
+                </p>
+                <ul class="achievements-list">
+                    <li>Head Boy, Academic - Demonstrated exceptional academic leadership</li>
+                    <li>JETS President - Led Junior Engineers, Technicians and Scientists Club</li>
+                    <li>National SOSTAZ Quiz Participant in 2019</li>
+                    <li>Achieved top academic performance and leadership recognition</li>
+                </ul>
+            </div>
+
+            <div class="education-item">
+                <h3>Primary School Certificate</h3>
+                <p class="institution">Nakowa Primary School, Zambia</p>
+                <p class="duration">Graduated: 2017</p>
+                <p class="description">
+                    Completed primary education with strong academic foundation. 
+                    Developed essential literacy, numeracy, and critical thinking skills that formed the basis for continued educational success.
+                </p>
+                <ul class="achievements-list">
+                    <li>Graduated as one of the top students in the class</li>
+                    <li>Received recognition for academic excellence and good conduct</li>
+                    <li>Participated in school sports and cultural activities</li>
+                    <li>Demonstrated early aptitude for mathematics and logical reasoning</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="about-section">
+            <h2>Certifications</h2>
+            <div class="certifications-grid">
+                <div class="certification-card">
+                    <h4>Cisco Endpoint Security</h4>
+                    <p class="issuer">Cisco</p>
+                    <p class="cert-date">Issued: Aug 2024</p>
+                    <p class="cert-expiry">Expires: Aug 2027</p>
+                    <p class="credential-id">ID: CISCO-ES-2024-BL001</p>
+                    <p class="cert-description">
+                        Demonstrates proficiency in endpoint security solutions, threat detection, and incident response using Cisco security technologies. 
+                        Covers advanced endpoint protection and security monitoring.
+                    </p>
+                </div>
+
+                <div class="certification-card">
+                    <h4>Cybersecurity Fundamentals</h4>
+                    <p class="issuer">Future Interns</p>
+                    <p class="cert-date">Issued: Jul 2024</p>
+                    <p class="credential-id">ID: FI-CYBER-2024-BL002</p>
+                    <p class="cert-description">
+                        Comprehensive cybersecurity training covering web application security testing, penetration testing fundamentals, 
+                        and security incident response procedures.
+                    </p>
+                </div>
+
+                <div class="certification-card">
+                    <h4>Web Application Security Testing</h4>
+                    <p class="issuer">Future Interns</p>
+                    <p class="cert-date">Issued: Sep 2024</p>
+                    <p class="credential-id">ID: FI-WAST-2024-BL003</p>
+                    <p class="cert-description">
+                        Specialized certification in web application security testing methodologies, vulnerability assessment, 
+                        and security testing tools including Burp Suite and OWASP testing framework.
+                    </p>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="about-section">
+            <h2>What I Do</h2>
+            <ul class="skills-list">
+                <li>Cybersecurity analysis and web application security testing</li>
+                <li>Penetration testing and vulnerability assessment</li>
+                <li>Full-stack web development with .NET and Blazor</li>
+                <li>Database design and SQL development</li>
+                <li>API development and security integration</li>
+                <li>Cross-platform development with .NET MAUI</li>
+            </ul>
+        </div>
+
+        <div class="download-section">
+            <button class="btn btn-primary" @onclick="DownloadCV">
+                <i class="bi bi-download"></i> Download CV
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await AnalyticsService.TrackPageViewAsync("/about", "About");
+    }
+
+    private async Task DownloadCV()
+    {
+        await AnalyticsService.TrackEventAsync("cv_download");
+        
+        // Create a download link and trigger the download
+        var fileName = "Bernard_Lusale_CV.pdf";
+        var fileUrl = "/documents/Bernard_Lusale_CV.pdf";
+        
+        await JSRuntime.InvokeVoidAsync("downloadFile", fileUrl, fileName);
+    }
+}
+
+<style>
+    .about-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .about-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .profile-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .about-profile-image {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        border: 4px solid #667eea;
+    }
+
+    .about-text {
+        text-align: left;
+    }
+
+    @@media (max-width: 768px) {
+        .profile-section {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .about-text {
+            text-align: center;
+        }
+    }
+
+    .about-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .lead {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .about-section {
+        margin-bottom: 2.5rem;
+    }
+
+    .about-section h2 {
+        color: #333;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 0.5rem;
+    }
+
+    .education-item {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .education-item:last-child {
+        border-bottom: none;
+    }
+
+    .education-item h3 {
+        margin-bottom: 0.25rem;
+        color: #333;
+    }
+
+    .education-item .institution {
+        color: #667eea;
+        font-weight: 600;
+        margin: 0.25rem 0;
+    }
+
+    .education-item .duration {
+        color: #666;
+        font-size: 0.9rem;
+        margin: 0.25rem 0;
+    }
+
+    .education-item .description {
+        color: #555;
+        margin: 0.75rem 0;
+        line-height: 1.6;
+    }
+
+    .achievements-list {
+        list-style: none;
+        padding: 0;
+        margin: 0.75rem 0;
+    }
+
+    .achievements-list li {
+        padding: 0.25rem 0;
+        border-left: 3px solid #28a745;
+        padding-left: 1rem;
+        margin-bottom: 0.5rem;
+        color: #555;
+        font-size: 0.9rem;
+    }
+
+    .certifications-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .certification-card {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid #667eea;
+        transition: transform 0.2s ease;
+    }
+
+    .certification-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .certification-card h4 {
+        margin: 0 0 0.5rem 0;
+        color: #333;
+        font-size: 1.1rem;
+    }
+
+    .certification-card .issuer {
+        color: #667eea;
+        font-weight: 600;
+        margin: 0.25rem 0;
+    }
+
+    .certification-card .cert-date,
+    .certification-card .cert-expiry {
+        color: #666;
+        font-size: 0.85rem;
+        margin: 0.25rem 0;
+    }
+
+    .certification-card .credential-id {
+        color: #888;
+        font-size: 0.8rem;
+        font-family: monospace;
+        margin: 0.5rem 0;
+    }
+
+    .certification-card .cert-description {
+        color: #555;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-top: 0.75rem;
+    }
+
+    .skills-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .skills-list li {
+        padding: 0.5rem 0;
+        border-left: 3px solid #667eea;
+        padding-left: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .download-section {
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    .btn {
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+</style>

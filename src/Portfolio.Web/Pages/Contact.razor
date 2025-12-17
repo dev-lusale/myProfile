@@ -1,0 +1,353 @@
+@page "/contact"
+@inject IApiService ApiService
+@inject IAnalyticsService AnalyticsService
+
+<PageTitle>Contact - Portfolio</PageTitle>
+
+<div class="contact-container">
+    <div class="contact-header">
+        <h1>Get In Touch</h1>
+        <p class="lead">Let's discuss your next project or collaboration opportunity</p>
+    </div>
+
+    <div class="contact-content">
+        <div class="contact-form-section">
+            <EditForm Model="contactForm" OnValidSubmit="HandleSubmit">
+                <DataAnnotationsValidator />
+                
+                <div class="form-group">
+                    <label for="name">Name *</label>
+                    <InputText id="name" @bind-Value="contactForm.Name" class="form-control" />
+                    <ValidationMessage For="() => contactForm.Name" />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <InputText id="email" @bind-Value="contactForm.Email" class="form-control" type="email" />
+                    <ValidationMessage For="() => contactForm.Email" />
+                </div>
+
+                <div class="form-group">
+                    <label for="company">Company</label>
+                    <InputText id="company" @bind-Value="contactForm.Company" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label for="interest">I'm interested in *</label>
+                    <InputSelect id="interest" @bind-Value="contactForm.InterestType" class="form-control">
+                        <option value="">Select an option</option>
+                        <option value="Hiring">Hiring</option>
+                        <option value="Collaboration">Collaboration</option>
+                        <option value="Consulting">Consulting</option>
+                    </InputSelect>
+                    <ValidationMessage For="() => contactForm.InterestType" />
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <InputTextArea id="message" @bind-Value="contactForm.Message" class="form-control" rows="5" />
+                    <ValidationMessage For="() => contactForm.Message" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" disabled="@isSubmitting">
+                        @if (isSubmitting)
+                        {
+                            <span class="spinner"></span>
+                            <text>Sending...</text>
+                        }
+                        else
+                        {
+                            <text>Send Message</text>
+                        }
+                    </button>
+                </div>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(submitMessage))
+            {
+                <div class="alert @(submitSuccess ? "alert-success" : "alert-error")">
+                    @submitMessage
+                </div>
+            }
+        </div>
+
+        <div class="contact-info-section">
+            <h3>Other Ways to Connect</h3>
+            <div class="contact-methods">
+                <a href="mailto:bernardlusale20@gmail.com" class="contact-method-link">
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <img src="/icons/email.svg" alt="Email" />
+                        </div>
+                        <div class="contact-info">
+                            <strong>Email</strong>
+                            <p>bernardlusale20@gmail.com</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.linkedin.com/in/bernard-lusale-631b9b31a?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BmOYdcM6ITzm1YcXFxZanAA%3D%3D" target="_blank" class="contact-method-link">
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <img src="/icons/linkedin.svg" alt="LinkedIn" />
+                        </div>
+                        <div class="contact-info">
+                            <strong>LinkedIn</strong>
+                            <p>linkedin.com/in/bernard-lusale-631b9b31a</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://github.com/Dev-Lusale" target="_blank" class="contact-method-link">
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <img src="/icons/github.svg" alt="GitHub" />
+                        </div>
+                        <div class="contact-info">
+                            <strong>GitHub</strong>
+                            <p>github.com/Dev-Lusale</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private ContactLead contactForm = new();
+    private bool isSubmitting = false;
+    private string submitMessage = string.Empty;
+    private bool submitSuccess = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AnalyticsService.TrackPageViewAsync("/contact", "Contact");
+    }
+
+    private async Task HandleSubmit()
+    {
+        isSubmitting = true;
+        submitMessage = string.Empty;
+        
+        try
+        {
+            // Submit contact form to API
+            var success = await ApiService.SubmitContactAsync(contactForm);
+            
+            if (success)
+            {
+                await AnalyticsService.TrackEventAsync("contact_form_submission", contactForm.InterestType);
+                
+                submitMessage = "Thank you for your message! I'll get back to you soon. You should also receive a confirmation email shortly.";
+                submitSuccess = true;
+                contactForm = new ContactLead(); // Reset form
+            }
+            else
+            {
+                submitMessage = "Sorry, there was an error sending your message. Please try again or contact me directly at bernardlusale20@gmail.com.";
+                submitSuccess = false;
+            }
+        }
+        catch (Exception)
+        {
+            submitMessage = "Sorry, there was an error sending your message. Please try again or contact me directly at bernardlusale20@gmail.com.";
+            submitSuccess = false;
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+}
+
+<style>
+    .contact-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .contact-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .contact-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .lead {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .contact-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 4rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+
+    .form-actions {
+        margin-top: 2rem;
+    }
+
+    .btn {
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    .alert {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .contact-info-section h3 {
+        margin-bottom: 1.5rem;
+        color: #333;
+    }
+
+    .contact-methods {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .contact-method-link {
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s ease;
+    }
+
+    .contact-method-link:hover {
+        transform: translateY(-2px);
+    }
+
+    .contact-method {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+    .contact-method:hover {
+        border-color: #667eea;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
+    .contact-icon img {
+        width: 20px;
+        height: 20px;
+        filter: brightness(0) invert(1);
+    }
+
+    .contact-info strong {
+        display: block;
+        color: #333;
+        margin-bottom: 0.25rem;
+        font-size: 1rem;
+    }
+
+    .contact-info p {
+        margin: 0;
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    @@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @@media (max-width: 768px) {
+        .contact-content {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+    }
+</style>

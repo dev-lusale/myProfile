@@ -1,0 +1,101 @@
+@page "/experiencedebug"
+@inject IApiService ApiService
+@inject HttpClient HttpClient
+
+<PageTitle>Experience Debug - Portfolio</PageTitle>
+
+<h3>Experience Debug Page</h3>
+
+<div class="mb-3">
+    <button class="btn btn-primary" @onclick="TestDirectCall">Test Direct API Call</button>
+    <button class="btn btn-secondary" @onclick="TestApiService">Test API Service</button>
+</div>
+
+<div class="alert alert-info">
+    <h5>Debug Results:</h5>
+    <pre>@debugResults</pre>
+</div>
+
+@if (experiences.Any())
+{
+    <div class="alert alert-success">
+        <h5>Experiences Loaded (@experiences.Count):</h5>
+        @foreach (var exp in experiences)
+        {
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h6>@exp.Position at @exp.Company</h6>
+                    <p>@exp.Description</p>
+                    <small>@exp.StartDate.ToString("MMM yyyy") - @(exp.IsCurrent ? "Present" : exp.EndDate?.ToString("MMM yyyy"))</small>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private string debugResults = "";
+    private List<Portfolio.Shared.Models.Experience> experiences = new();
+
+    private async Task TestDirectCall()
+    {
+        debugResults = "Testing direct API call to /api/experience...\n";
+        
+        try
+        {
+            var response = await HttpClient.GetAsync("api/experience");
+            debugResults += $"Response Status: {response.StatusCode}\n";
+            debugResults += $"Response Headers: {string.Join(", ", response.Headers.Select(h => $"{h.Key}={string.Join(",", h.Value)}"))}\n";
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                debugResults += $"Content Length: {content.Length}\n";
+                debugResults += $"First 300 chars: {content.Substring(0, Math.Min(300, content.Length))}\n";
+                
+                var experienceData = await response.Content.ReadFromJsonAsync<List<Portfolio.Shared.Models.Experience>>();
+                experiences = experienceData ?? new List<Portfolio.Shared.Models.Experience>();
+                debugResults += $"Experiences parsed: {experiences.Count}\n";
+                
+                if (experiences.Any())
+                {
+                    debugResults += $"First experience: {experiences[0].Position} at {experiences[0].Company}\n";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            debugResults += $"Error: {ex.Message}\n";
+            debugResults += $"Stack: {ex.StackTrace}\n";
+        }
+        
+        StateHasChanged();
+    }
+
+    private async Task TestApiService()
+    {
+        debugResults = "Testing API Service GetExperiencesAsync()...\n";
+        
+        try
+        {
+            experiences = await ApiService.GetExperiencesAsync();
+            debugResults += $"Experiences from service: {experiences.Count}\n";
+            
+            if (experiences.Any())
+            {
+                debugResults += $"First experience: {experiences[0].Position} at {experiences[0].Company}\n";
+                debugResults += $"Description: {experiences[0].Description.Substring(0, Math.Min(100, experiences[0].Description.Length))}...\n";
+                debugResults += $"Technologies count: {experiences[0].Technologies.Count}\n";
+                debugResults += $"Achievements count: {experiences[0].Achievements.Count}\n";
+            }
+        }
+        catch (Exception ex)
+        {
+            debugResults += $"Service Error: {ex.Message}\n";
+            debugResults += $"Inner Exception: {ex.InnerException?.Message}\n";
+            debugResults += $"Stack: {ex.StackTrace}\n";
+        }
+        
+        StateHasChanged();
+    }
+}

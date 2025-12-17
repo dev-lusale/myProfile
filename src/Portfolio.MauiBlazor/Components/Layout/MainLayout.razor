@@ -1,0 +1,131 @@
+@inherits LayoutComponentBase
+@inject Portfolio.Shared.Services.SidebarService SidebarService
+@implements IDisposable
+
+<div class="page" @onkeydown="HandleKeyDown" tabindex="0">
+    <div class="sidebar @(isCollapsed ? "collapsed" : "")">
+        <NavMenu />
+    </div>
+
+    <main class="main-content @(isCollapsed ? "sidebar-collapsed" : "")">
+        <TopNavBar />
+        
+        <article class="content">
+            @Body
+        </article>
+    </main>
+    
+    @if (isCollapsed)
+    {
+        <div class="sidebar-overlay" @onclick="CloseSidebar"></div>
+    }
+</div>
+
+@code {
+    private bool isCollapsed = false;
+
+    protected override void OnInitialized()
+    {
+        // Initialize sidebar state
+        isCollapsed = SidebarService.IsCollapsed;
+        
+        // Subscribe to sidebar state changes
+        SidebarService.OnStateChanged += OnSidebarStateChanged;
+    }
+
+    private void OnSidebarStateChanged()
+    {
+        isCollapsed = SidebarService.IsCollapsed;
+        StateHasChanged();
+    }
+    
+    private void CloseSidebar()
+    {
+        SidebarService.ExpandSidebar();
+    }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        SidebarService.HandleKeyboardShortcut(e.Key, e.CtrlKey);
+    }
+    
+    public void Dispose()
+    {
+        SidebarService.OnStateChanged -= OnSidebarStateChanged;
+    }
+}
+
+<style>
+    .page {
+        position: relative;
+        display: flex;
+        height: 100vh;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar {
+        width: 280px;
+        background: #1a1d29;
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        z-index: 1001;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+        transform: translateX(-100%);
+    }
+
+    .main-content {
+        flex: 1;
+        margin-left: 280px;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        transition: margin-left 0.3s ease;
+    }
+
+    .main-content.sidebar-collapsed {
+        margin-left: 0;
+    }
+
+    .content {
+        flex: 1;
+        padding: 2rem;
+        background: #f8f9fa;
+        overflow-y: auto;
+    }
+
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: none;
+    }
+
+    /* Mobile Responsive */
+    @@media (max-width: 768px) {
+        .sidebar {
+            transform: translateX(-100%);
+        }
+
+        .sidebar:not(.collapsed) {
+            transform: translateX(0);
+        }
+
+        .main-content {
+            margin-left: 0;
+        }
+
+        .sidebar-overlay {
+            display: block;
+        }
+    }
+</style>

@@ -1,0 +1,413 @@
+@using Portfolio.Shared.Components
+
+<div class="nav-header">
+    <div class="nav-brand">
+        <div class="brand-logo">
+            <div class="logo-circle">
+                <span class="logo-text">BL</span>
+            </div>
+        </div>
+        <div class="brand-info">
+            <h3 class="brand-name">Bernard Lusale</h3>
+            <p class="brand-title">Software Engineer</p>
+        </div>
+    </div>
+    <button title="Navigation menu" class="nav-toggle" @onclick="ToggleNavMenu">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass nav-content">
+    <nav class="nav-menu">
+        <div class="nav-section">
+            <div class="nav-item">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <div class="nav-icon">
+                        <i class="bi bi-house-fill"></i>
+                    </div>
+                    <span class="nav-text">Home</span>
+                    <div class="nav-indicator"></div>
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="about">
+                    <div class="nav-icon">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <span class="nav-text">About</span>
+                    <div class="nav-indicator"></div>
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="skills">
+                    <div class="nav-icon">
+                        <i class="bi bi-gear-fill"></i>
+                    </div>
+                    <span class="nav-text">Skills</span>
+                    <div class="nav-indicator"></div>
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="projects">
+                    <div class="nav-icon">
+                        <i class="bi bi-folder-fill"></i>
+                    </div>
+                    <span class="nav-text">Projects</span>
+                    <div class="nav-indicator"></div>
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="experience">
+                    <div class="nav-icon">
+                        <i class="bi bi-briefcase-fill"></i>
+                    </div>
+                    <span class="nav-text">Experience</span>
+                    <div class="nav-indicator"></div>
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="contact">
+                    <div class="nav-icon">
+                        <i class="bi bi-envelope-fill"></i>
+                    </div>
+                    <span class="nav-text">Contact</span>
+                    <div class="nav-indicator"></div>
+                </NavLink>
+            </div>
+        </div>
+        
+        <div class="nav-footer">
+            <div class="social-section">
+                <h4 class="social-title">Connect</h4>
+                <SocialLinks Size="small" />
+            </div>
+            <div class="nav-version">
+                <span>Portfolio v2.0</span>
+            </div>
+        </div>
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void CollapseNavMenu()
+    {
+        collapseNavMenu = true;
+    }
+}
+<style>
+    /* Navigation Header */
+    .nav-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .brand-logo .logo-circle {
+        width: 45px;
+        height: 45px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .logo-text {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 1px;
+    }
+
+    .brand-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .brand-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .brand-title {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin: 0;
+        font-weight: 400;
+    }
+
+    .nav-toggle {
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        background: none;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-toggle:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .toggle-line {
+        width: 20px;
+        height: 2px;
+        background: white;
+        border-radius: 1px;
+        transition: all 0.3s ease;
+    }
+
+    /* Navigation Content */
+    .nav-content {
+        height: calc(100vh - 120px);
+        overflow-y: auto;
+        background: #1a1d29;
+        position: relative;
+    }
+
+    .nav-content::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .nav-content::-webkit-scrollbar-track {
+        background: #2a2d3a;
+    }
+
+    .nav-content::-webkit-scrollbar-thumb {
+        background: #667eea;
+        border-radius: 2px;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 1rem 0;
+    }
+
+    .nav-section {
+        flex: 1;
+        padding: 0 0.5rem;
+    }
+
+    /* Navigation Items */
+    .nav-item {
+        margin-bottom: 0.5rem;
+        position: relative;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.875rem 1rem;
+        color: #a0a3bd;
+        text-decoration: none;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .nav-link::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: 12px;
+    }
+
+    .nav-link:hover {
+        color: white;
+        transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .nav-link:hover::before {
+        opacity: 0.1;
+    }
+
+    .nav-link.active {
+        color: white;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transform: translateX(4px);
+    }
+
+    .nav-link.active::before {
+        opacity: 0;
+    }
+
+    .nav-icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .nav-icon i {
+        font-size: 18px;
+        color: #a0a3bd;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link:hover .nav-icon i,
+    .nav-link.active .nav-icon i {
+        color: white;
+    }
+
+    .nav-text {
+        position: relative;
+        z-index: 1;
+        font-weight: 500;
+    }
+
+    .nav-indicator {
+        position: absolute;
+        right: 1rem;
+        width: 4px;
+        height: 4px;
+        background: #667eea;
+        border-radius: 50%;
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 1;
+    }
+
+    .nav-link.active .nav-indicator {
+        opacity: 1;
+        background: white;
+    }
+
+    /* Navigation Footer */
+    .nav-footer {
+        padding: 1rem;
+        border-top: 1px solid #2a2d3a;
+        margin-top: auto;
+    }
+
+    .social-section {
+        margin-bottom: 1rem;
+    }
+
+    .social-title {
+        font-size: 0.8rem;
+        color: #a0a3bd;
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .nav-version {
+        text-align: center;
+        padding-top: 0.75rem;
+        border-top: 1px solid #2a2d3a;
+    }
+
+    .nav-version span {
+        font-size: 0.75rem;
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    /* Mobile Responsive */
+    @@media (max-width: 768px) {
+        .nav-toggle {
+            display: flex;
+        }
+
+        .brand-info {
+            display: none;
+        }
+
+        .nav-content.collapse {
+            display: none;
+        }
+
+        .nav-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: calc(100vh - 80px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-link {
+            padding: 1rem 1.5rem;
+        }
+
+        .nav-text {
+            font-size: 1rem;
+        }
+    }
+
+    /* Hover Effects */
+    .nav-item:hover {
+        transform: scale(1.02);
+    }
+
+    .nav-link:hover {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    }
+
+    /* Active State Animation */
+    .nav-link.active {
+        animation: activeGlow 2s ease-in-out infinite alternate;
+    }
+
+    @@keyframes activeGlow {
+        0% {
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        100% {
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+    }
+
+    /* Smooth Transitions */
+    * {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+</style>
