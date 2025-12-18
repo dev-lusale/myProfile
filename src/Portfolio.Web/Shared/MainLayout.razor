@@ -25,7 +25,7 @@
 </div>
 
 @code {
-    private bool isCollapsed = false;
+    private bool isCollapsed = true; // Start collapsed by default
 
     protected override async Task OnInitializedAsync()
     {
@@ -101,11 +101,21 @@
         box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(10px);
-        transform: translateX(-100%); /* Hidden by default */
+        transform: translateX(-100%) !important; /* Force hidden by default */
+        visibility: hidden;
+        opacity: 0;
     }
 
     .sidebar:not(.collapsed) {
-        transform: translateX(0); /* Show when not collapsed */
+        transform: translateX(0) !important; /* Show when not collapsed */
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .sidebar.collapsed {
+        transform: translateX(-100%) !important; /* Ensure hidden when collapsed */
+        visibility: hidden !important;
+        opacity: 0 !important;
     }
 
     .main-content {
@@ -167,6 +177,20 @@
     @@media (max-width: 768px) {
         .sidebar {
             width: 280px;
+            transform: translateX(-100%) !important; /* Force hidden on mobile */
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+
+        .sidebar:not(.collapsed) {
+            transform: translateX(0) !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .main-content {
+            margin-left: 0 !important;
+            width: 100vw !important;
         }
 
         .content {
