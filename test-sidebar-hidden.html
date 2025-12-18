@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sidebar Test - Should be Hidden by Default</title>
+    <style>
+        .sidebar {
+            width: 280px;
+            background: #1a1d29;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 1001;
+            transform: translateX(-100%) !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar:not(.collapsed) {
+            transform: translateX(0) !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .sidebar.collapsed {
+            transform: translateX(-100%) !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+        
+        .main-content {
+            margin-left: 0;
+            width: 100vw;
+            padding: 20px;
+        }
+        
+        .hamburger {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        .test-sidebar {
+            color: white;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar collapsed" id="sidebar">
+        <div class="test-sidebar">
+            <h3>Navigation Menu</h3>
+            <p>This should be HIDDEN by default!</p>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <h1>Sidebar Visibility Test</h1>
+        <p><strong>Expected:</strong> Sidebar should be completely hidden when page loads</p>
+        <button class="hamburger" onclick="toggleSidebar()">☰ Toggle Sidebar</button>
+        <p id="status">Sidebar Status: <span id="sidebarStatus">Hidden (Correct!)</span></p>
+    </div>
+    
+    <script>
+        let isCollapsed = true;
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const status = document.getElementById('sidebarStatus');
+            
+            if (isCollapsed) {
+                sidebar.classList.remove('collapsed');
+                status.textContent = 'Visible';
+                isCollapsed = false;
+            } else {
+                sidebar.classList.add('collapsed');
+                status.textContent = 'Hidden (Correct!)';
+                isCollapsed = true;
+            }
+        }
+        
+        // Verify sidebar is hidden on load
+        window.onload = function() {
+            const sidebar = document.getElementById('sidebar');
+            const computedStyle = window.getComputedStyle(sidebar);
+            const transform = computedStyle.transform;
+            const visibility = computedStyle.visibility;
+            
+            console.log('Sidebar transform:', transform);
+            console.log('Sidebar visibility:', visibility);
+            
+            if (visibility === 'hidden' || transform.includes('translateX(-280px)') || transform.includes('matrix(1, 0, 0, 1, -280, 0)')) {
+                document.getElementById('sidebarStatus').textContent = 'Hidden (Correct!) ✅';
+                document.getElementById('sidebarStatus').style.color = 'green';
+            } else {
+                document.getElementById('sidebarStatus').textContent = 'Visible (ERROR!) ❌';
+                document.getElementById('sidebarStatus').style.color = 'red';
+            }
+        };
+    </script>
+</body>
+</html>
