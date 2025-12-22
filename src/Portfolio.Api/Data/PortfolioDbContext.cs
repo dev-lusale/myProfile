@@ -276,8 +276,6 @@ public class PortfolioDbContext : IdentityDbContext
                 Description = "Completed secondary education with strong performance in mathematics, sciences, and computer studies. Developed foundational knowledge in analytical thinking and problem-solving that laid the groundwork for pursuing computer science.",
                 Achievements = new List<string> 
                 { 
-                    "Graduated with distinction in Mathematics and Computer Studies",
-                    "Served as class representative and peer tutor",
                     "Participated in inter-school science competitions",
                     "Completed advanced mathematics and physics coursework"
                 },
