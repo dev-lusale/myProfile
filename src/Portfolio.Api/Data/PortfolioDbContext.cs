@@ -167,57 +167,36 @@ public class PortfolioDbContext : IdentityDbContext
             new Project 
             { 
                 Id = 1, 
-                Title = "Aquafy - Water Quality Management System", 
-                Description = "A comprehensive water quality monitoring and management system designed to track, analyze, and report on water quality parameters. Features real-time data collection, automated alerts for quality thresholds, comprehensive reporting dashboard, and mobile access for field technicians. Built with modern web technologies and responsive design.",
-                GitHubUrl = "https://github.com/bernardlusale/aquafy",
-                LiveDemoUrl = "https://aquafy-demo.bernardlusale.dev",
-                ImageUrl = "/images/projects/aquafy.jpg",
-                TechStack = new List<string> { "ASP.NET Core", "Blazor", "C#", "SQL Server", "Entity Framework", "Bootstrap", "Chart.js", "SignalR" },
-                CreatedAt = DateTime.UtcNow.AddMonths(-6)
+                Title = "TechMart - E-Commerce Platform", 
+                Description = "TechMart is a cutting-edge, professional e-commerce platform designed to provide a high-performance shopping experience for consumer and enterprise electronics. Developed with a focus on modern 2025 standards, it combines a sleek, responsive UI/UX with robust backend functionality to drive digital sales and user engagement.",
+                GitHubUrl = "https://github.com/Dev-Lusale/TechMart",
+                LiveDemoUrl = "",
+                ImageUrl = "/images/projects/techmart.jpg",
+                TechStack = new List<string> { "ASP.NET Core", "C#", "HTML", "CSS", "JavaScript", "SQL Server", "Entity Framework" },
+                CreatedAt = DateTime.UtcNow.AddMonths(-2)
             },
             new Project 
             { 
                 Id = 2, 
-                Title = "Portfolio Website", 
-                Description = "A modern, responsive portfolio website showcasing my skills, projects, and professional experience. Built with .NET MAUI Blazor for cross-platform compatibility, featuring both web and mobile versions. Includes dynamic content management, contact forms, and analytics tracking.",
-                GitHubUrl = "https://github.com/bernardlusale/portfolio",
-                LiveDemoUrl = "https://bernardlusale.dev",
-                ImageUrl = "/images/projects/portfolio.jpg",
-                TechStack = new List<string> { "ASP.NET Core", ".NET MAUI", "Blazor", "C#", "SQL Server", "Entity Framework", "Bootstrap", "JavaScript" },
-                CreatedAt = DateTime.UtcNow.AddMonths(-3)
-            },
-            new Project 
-            { 
-                Id = 3, 
-                Title = "Cybersecurity Assessment Tool", 
-                Description = "A web-based security assessment tool developed during my cybersecurity internship. Features vulnerability scanning, security report generation, and compliance checking. Includes automated testing capabilities and detailed security recommendations for web applications.",
-                GitHubUrl = "https://github.com/bernardlusale/security-assessment",
+                Title = "Student Record Thinker - AI Grade Predictor", 
+                Description = "A student record thinker that predicts students' grades using machine learning algorithms. This intelligent system analyzes historical academic data, attendance patterns, and performance metrics to provide accurate grade predictions and academic insights for educational institutions.",
+                GitHubUrl = "https://github.com/Dev-Lusale/student_record-thinker",
                 LiveDemoUrl = "",
-                ImageUrl = "/images/projects/security-tool.jpg",
-                TechStack = new List<string> { "C#", "ASP.NET Core", "Blazor", "SQL Server", "Burp Suite API", "Nmap", "Security Testing" },
+                ImageUrl = "/images/projects/student-predictor.jpg",
+                TechStack = new List<string> { "C++", "Machine Learning", "Data Analysis", "Algorithms", "Statistical Modeling" },
                 CreatedAt = DateTime.UtcNow.AddMonths(-4)
             },
             new Project 
             { 
-                Id = 4, 
-                Title = "Student Management System", 
-                Description = "A comprehensive student information system for educational institutions. Features student enrollment, grade management, attendance tracking, and parent portal. Built with modern web technologies and includes role-based access control for different user types.",
-                GitHubUrl = "https://github.com/bernardlusale/student-management",
+                Id = 3, 
+                Title = "Mukubaico EnviroSafe App - Environmental Safety Platform", 
+                Description = "Mukubaico Environmental (MUKUBAICO) is an innovative, technology-driven environmental and mining safety consultancy platform focused on sustainable resource management and pollution prevention. The application provides comprehensive environmental monitoring, safety compliance tracking, and sustainability reporting tools.",
+                GitHubUrl = "https://github.com/Dev-Lusale/Mukubaico-enviroSafe-app",
                 LiveDemoUrl = "",
-                ImageUrl = "/images/projects/student-system.jpg",
-                TechStack = new List<string> { "ASP.NET Core", "Blazor Server", "C#", "SQL Server", "Entity Framework", "Bootstrap", "Identity Framework" },
-                CreatedAt = DateTime.UtcNow.AddMonths(-8)
-            },
-            new Project 
-            { 
-                Id = 5, 
-                Title = "API Testing Framework", 
-                Description = "A custom API testing framework developed to automate REST API testing and validation. Features automated test generation, response validation, performance testing, and comprehensive reporting. Used for testing web applications and microservices.",
-                GitHubUrl = "https://github.com/bernardlusale/api-testing-framework",
-                LiveDemoUrl = "",
-                ImageUrl = "/images/projects/api-testing.jpg",
-                TechStack = new List<string> { "C#", ".NET Core", "xUnit", "Postman", "REST APIs", "JSON", "HTTP Client" },
-                CreatedAt = DateTime.UtcNow.AddMonths(-5)
+                ImageUrl = "/images/projects/mukubaico.jpg",
+                TechStack = new List<string> { "Environmental Monitoring", "Safety Compliance", "Data Analytics", "Sustainability Reporting", "Mining Safety" },
+                CreatedAt = DateTime.UtcNow.AddMonths(-3)
+            }
             }
         );
 
