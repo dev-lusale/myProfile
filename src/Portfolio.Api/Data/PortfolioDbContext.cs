@@ -282,41 +282,6 @@ public class PortfolioDbContext : IdentityDbContext
                 },
                 DisplayOrder = 2
             },
-            new Education
-            {
-                Id = 3,
-                Degree = "Junior Secondary School Certificate",
-                Institution = "Choma Secondary School",
-                Location = "Zambia",
-                StartDate = new DateTime(2015, 1, 15),
-                EndDate = new DateTime(2019, 12, 15),
-                IsCompleted = true,
-                Description = "Completed junior secondary education with excellent academic performance. Developed strong foundation in core subjects including mathematics, sciences, and English, which prepared for advanced secondary studies.",
-                Achievements = new List<string> 
-                { 
-                    "National participant SOSTAZ Quiz"
-                },
-                DisplayOrder = 3
-            },
-            new Education
-            {
-                Id = 4,
-                Degree = "Primary School Certificate",
-                Institution = "Nakowa Primary School",
-                Location = "Zambia",
-                StartDate = new DateTime(2010, 1, 15),
-                EndDate = new DateTime(2017, 12, 15),
-                IsCompleted = true,
-                Description = "Completed primary education with strong academic foundation. Developed essential literacy, numeracy, and critical thinking skills that formed the basis for continued educational success.",
-                Achievements = new List<string> 
-                { 
-                    "Graduated as one of the top students in the class",
-                    "Received recognition for academic excellence and good conduct",
-                    "Participated in school sports and cultural activities",
-                    "Demonstrated early aptitude for mathematics and logical reasoning"
-                },
-                DisplayOrder = 4
-            }
         );
 
         builder.Entity<Certification>().HasData(
