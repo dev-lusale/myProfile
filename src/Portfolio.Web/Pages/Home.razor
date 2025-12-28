@@ -96,17 +96,21 @@
         padding: 2rem 0;
         max-width: 1400px;
         margin: 0 auto;
+        background: var(--hero-bg);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px var(--shadow-color);
     }
 
     .hero-content {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        padding: 2rem;
     }
 
     .hero-greeting {
         font-size: clamp(1rem, 2.5vw, 1.3rem);
-        color: #6c757d;
+        color: var(--text-muted);
         margin-bottom: 0.25rem;
         font-weight: 400;
         line-height: 1.2;
@@ -162,12 +166,12 @@
 
     .hero-subtitle {
         font-size: clamp(1.1rem, 2.8vw, 1.6rem);
-        color: #495057;
+        color: var(--text-secondary);
         margin-bottom: 1.75rem;
         font-weight: 500;
         line-height: 1.4;
         letter-spacing: 0.01em;
-        background: linear-gradient(135deg, #495057 0%, #6c757d 100%);
+        background: linear-gradient(135deg, var(--text-secondary) 0%, var(--text-muted) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -200,7 +204,7 @@
     }
 
     .typing-cursor-desc {
-        background: #495057;
+        background: var(--text-secondary);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -216,20 +220,21 @@
         font-size: clamp(0.95rem, 2.2vw, 1.15rem);
         line-height: 1.8;
         margin-bottom: 2.75rem;
-        color: #495057;
+        color: var(--text-secondary);
         max-width: 650px;
         font-weight: 400;
         text-align: justify;
         hyphens: auto;
         word-spacing: 0.05em;
-        background: rgba(255, 255, 255, 0.9);
+        background: var(--card-bg);
         padding: 1.5rem;
         border-radius: 12px;
         border-left: 4px solid #667eea;
-        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 15px var(--shadow-color);
         position: relative;
         backdrop-filter: blur(10px);
         min-height: 8em;
+        border: 1px solid var(--border-color);
     }
 
     .hero-description::before {

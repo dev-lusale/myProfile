@@ -2,190 +2,174 @@
 
 <div class="theme-toggle-container">
     <button class="theme-toggle-btn" @onclick="ToggleTheme" title="@(isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode")">
-        <div class="toggle-track">
-            <div class="toggle-thumb @(isDarkMode ? "dark" : "light")">
-                @if (isDarkMode)
-                {
-                    <svg class="theme-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.752-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                }
-                else
-                {
-                    <svg class="theme-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/>
-                        <path d="m12 2 0 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="m12 20 0 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="m4.93 4.93 1.41 1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="m17.66 17.66 1.41 1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="m2 12 2 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="m20 12 2 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="m6.34 17.66-1.41 1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="m19.07 4.93-1.41 1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                }
-            </div>
+        <div class="toggle-icon">
+            @if (isDarkMode)
+            {
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21.64 13a1 1 0 0 0-1.05-.14 8.05 8.05 0 0 1-3.37.73A8.15 8.15 0 0 1 9.08 5.49a8.59 8.59 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05Zm-9.5 6.69A8.14 8.14 0 0 1 7.08 5.22v.27A10.15 10.15 0 0 0 17.22 15.63a9.79 9.79 0 0 0 2.1-.22A8.11 8.11 0 0 1 12.14 19.73Z" fill="currentColor"/>
+                </svg>
+            }
+            else
+            {
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" fill="currentColor"/>
+                </svg>
+            }
         </div>
+        <span class="toggle-label">@(isDarkMode ? "Dark" : "Light")</span>
     </button>
 </div>
 
 @code {
     private bool isDarkMode = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Check for saved theme preference or system preference
-        isDarkMode = await JSRuntime.InvokeAsync<bool>("getThemePreference");
-        await ApplyTheme();
+        if (firstRender)
+        {
+            try 
+            {
+                // Check for saved theme preference
+                var savedTheme = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "theme-preference");
+                isDarkMode = savedTheme == "dark";
+                
+                // Apply theme using JavaScript function
+                await JSRuntime.InvokeVoidAsync("applyTheme", isDarkMode);
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Theme initialization error: {ex.Message}");
+                isDarkMode = false;
+            }
+        }
     }
 
     private async Task ToggleTheme()
     {
-        isDarkMode = !isDarkMode;
-        await ApplyTheme();
-        await JSRuntime.InvokeVoidAsync("saveThemePreference", isDarkMode);
-    }
-
-    private async Task ApplyTheme()
-    {
-        await JSRuntime.InvokeVoidAsync("applyTheme", isDarkMode);
-        StateHasChanged();
+        try
+        {
+            isDarkMode = !isDarkMode;
+            
+            // Apply theme using JavaScript function
+            await JSRuntime.InvokeVoidAsync("applyTheme", isDarkMode);
+            
+            // Save preference
+            await JSRuntime.InvokeVoidAsync("saveThemePreference", isDarkMode);
+            
+            Console.WriteLine($"Theme toggled to: {(isDarkMode ? "dark" : "light")}");
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Theme toggle error: {ex.Message}");
+        }
     }
 }
 
 <style>
     .theme-toggle-container {
         position: fixed;
-        top: 2rem;
-        right: 2rem;
-        z-index: 1000;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
     }
 
     .theme-toggle-btn {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 50px;
-        padding: 0.5rem;
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        width: 60px;
-        height: 32px;
         display: flex;
         align-items: center;
+        gap: 8px;
+        background: var(--card-bg, #ffffff);
+        border: 2px solid #667eea;
+        border-radius: 30px;
+        padding: 10px 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px var(--shadow-color, rgba(0, 0, 0, 0.15));
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-primary, #333);
+        min-width: 100px;
         justify-content: center;
     }
 
     .theme-toggle-btn:hover {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.3);
+        background: var(--bg-primary, #ffffff);
         transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 6px 25px var(--shadow-color, rgba(0, 0, 0, 0.2));
+        border-color: #764ba2;
     }
 
-    .toggle-track {
-        width: 48px;
-        height: 24px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 12px;
-        position: relative;
-        transition: all 0.3s ease;
-    }
-
-    .toggle-thumb {
-        width: 20px;
-        height: 20px;
-        background: white;
-        border-radius: 50%;
-        position: absolute;
-        top: 2px;
+    .toggle-icon {
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        width: 20px;
+        height: 20px;
     }
 
-    .toggle-thumb.light {
-        left: 2px;
-        background: #ffd700;
-        box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    .toggle-icon svg {
+        transition: transform 0.3s ease;
     }
 
-    .toggle-thumb.dark {
-        left: 26px;
-        background: #2d3748;
-        box-shadow: 0 2px 8px rgba(45, 55, 72, 0.3);
+    .theme-toggle-btn:hover .toggle-icon svg {
+        transform: rotate(15deg);
     }
 
-    .theme-icon {
-        width: 12px;
-        height: 12px;
-        color: white;
+    .toggle-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        font-weight: 700;
     }
 
-    .toggle-thumb.light .theme-icon {
-        color: #f7931e;
-    }
-
-    .toggle-thumb.dark .theme-icon {
-        color: #e2e8f0;
-    }
-
-    /* Dark mode styles for the toggle */
+    /* Dark mode styles */
     :global(body.dark-mode) .theme-toggle-btn {
-        background: rgba(0, 0, 0, 0.2);
-        border-color: rgba(255, 255, 255, 0.1);
+        background: var(--card-bg, rgba(30, 41, 59, 0.95));
+        border-color: #94a3b8;
+        color: var(--text-primary, #e2e8f0);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     }
 
     :global(body.dark-mode) .theme-toggle-btn:hover {
-        background: rgba(0, 0, 0, 0.3);
-        border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    :global(body.dark-mode) .toggle-track {
-        background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+        background: var(--bg-secondary, rgba(30, 41, 59, 1));
+        border-color: #e2e8f0;
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
     }
 
     /* Mobile responsive */
     @@media (max-width: 768px) {
         .theme-toggle-container {
-            top: 1rem;
-            right: 1rem;
+            top: 15px;
+            right: 15px;
         }
 
         .theme-toggle-btn {
-            width: 56px;
-            height: 30px;
+            padding: 8px 12px;
+            font-size: 12px;
+            min-width: 85px;
         }
 
-        .toggle-track {
-            width: 44px;
-            height: 22px;
-        }
-
-        .toggle-thumb {
+        .toggle-icon {
             width: 18px;
             height: 18px;
         }
 
-        .toggle-thumb.dark {
-            left: 24px;
-        }
-
-        .theme-icon {
-            width: 10px;
-            height: 10px;
+        .toggle-label {
+            font-size: 10px;
         }
     }
 
-    /* Reduced motion */
-    @@media (prefers-reduced-motion: reduce) {
-        .theme-toggle-btn,
-        .toggle-track,
-        .toggle-thumb {
-            transition: none;
+    /* Small mobile */
+    @@media (max-width: 480px) {
+        .theme-toggle-container {
+            top: 10px;
+            right: 10px;
+        }
+
+        .theme-toggle-btn {
+            padding: 6px 10px;
+            min-width: 75px;
         }
     }
 </style>

@@ -41,13 +41,118 @@ body.dark-mode .content {
 }
 
 body.dark-mode .sidebar {
-    background: linear-gradient(180deg, #0f172a 0%, #1e293b 70%);
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 70%) !important;
 }
 
 body.dark-mode .top-row {
-    background-color: var(--bg-tertiary);
-    border-bottom-color: var(--border-color);
-    color: var(--text-primary);
+    background-color: var(--bg-tertiary) !important;
+    border-bottom-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Dark mode for cards and components */
+body.dark-mode .card,
+body.dark-mode .hero-section,
+body.dark-mode .about-section,
+body.dark-mode .skills-section,
+body.dark-mode .projects-section,
+body.dark-mode .experience-section,
+body.dark-mode .contact-section {
+    background: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode .hero-content {
+    background: var(--hero-bg) !important;
+}
+
+body.dark-mode .navbar-nav .nav-link {
+    color: var(--text-secondary) !important;
+}
+
+body.dark-mode .navbar-nav .nav-link:hover {
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border-color: #667eea !important;
+}
+
+body.dark-mode .btn-outline-primary {
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode .btn-outline-primary:hover {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .form-control {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .form-control:focus {
+    background: var(--bg-secondary) !important;
+    border-color: #667eea !important;
+    color: var(--text-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+}
+
+body.dark-mode .form-label {
+    color: var(--text-secondary) !important;
+}
+
+body.dark-mode .text-muted {
+    color: var(--text-muted) !important;
+}
+
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4, 
+body.dark-mode h5, 
+body.dark-mode h6 {
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode p {
+    color: var(--text-secondary) !important;
+}
+
+body.dark-mode .badge {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .alert {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .list-group-item {
+    background: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .dropdown-menu {
+    background: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode .dropdown-item {
+    color: var(--text-primary) !important;
+}
+
+body.dark-mode .dropdown-item:hover {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
 }
 
 .page {
