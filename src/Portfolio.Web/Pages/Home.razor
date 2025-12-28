@@ -148,9 +148,10 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        animation: blink 1s infinite;
+        animation: realistic-blink 1.2s infinite;
         font-weight: 400;
         margin-left: 2px;
+        opacity: 1;
     }
 
     .typing-cursor-desc {
@@ -160,9 +161,10 @@
         background-clip: text;
     }
 
-    @@keyframes blink {
-        0%, 50% { opacity: 1; }
-        51%, 100% { opacity: 0; }
+    @@keyframes realistic-blink {
+        0%, 45% { opacity: 1; }
+        46%, 54% { opacity: 0; }
+        55%, 100% { opacity: 1; }
     }
 
     .hero-description {

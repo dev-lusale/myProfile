@@ -1,4 +1,4 @@
-// Professional Typing Effect
+// Professional Typing Effect with Continuous Loop
 window.startTypingEffect = function(subtitleText, descriptionText) {
     const subtitleElement = document.getElementById('typing-subtitle');
     const descriptionElement = document.getElementById('typing-description');
@@ -7,11 +7,12 @@ window.startTypingEffect = function(subtitleText, descriptionText) {
     
     if (!subtitleElement || !descriptionElement) return;
     
-    // Configuration
-    const subtitleSpeed = 80; // milliseconds per character
-    const descriptionSpeed = 30; // milliseconds per character
-    const pauseBetween = 1000; // pause between subtitle and description
-    const initialDelay = 500; // initial delay before starting
+    // Configuration for realistic typing
+    const typeSpeed = 120; // milliseconds per character (readable speed)
+    const deleteSpeed = 80; // milliseconds per character when deleting
+    const pauseAfterComplete = 2000; // pause after typing complete text
+    const pauseBeforeDelete = 1500; // pause before starting to delete
+    const initialDelay = 800; // initial delay before starting
     
     // Hide cursors initially
     if (subtitleCursor) subtitleCursor.style.display = 'none';
@@ -19,56 +20,50 @@ window.startTypingEffect = function(subtitleText, descriptionText) {
     
     // Clear existing content
     subtitleElement.textContent = '';
-    descriptionElement.textContent = '';
+    descriptionElement.textContent = descriptionText; // Set description immediately
     
-    // Start typing after initial delay
+    let isTyping = false;
+    let currentIndex = 0;
+    let isDeleting = false;
+    
+    // Start the continuous loop after initial delay
     setTimeout(() => {
-        typeSubtitle();
+        startContinuousLoop();
     }, initialDelay);
     
-    function typeSubtitle() {
+    function startContinuousLoop() {
         if (subtitleCursor) subtitleCursor.style.display = 'inline-block';
-        
-        let i = 0;
-        const timer = setInterval(() => {
-            if (i < subtitleText.length) {
-                subtitleElement.textContent += subtitleText.charAt(i);
-                i++;
-            } else {
-                clearInterval(timer);
-                // Hide subtitle cursor and start description after pause
-                setTimeout(() => {
-                    if (subtitleCursor) subtitleCursor.style.display = 'none';
-                    typeDescription();
-                }, pauseBetween);
-            }
-        }, subtitleSpeed);
+        typewriterLoop();
     }
     
-    function typeDescription() {
-        if (descriptionCursor) descriptionCursor.style.display = 'inline-block';
+    function typewriterLoop() {
+        const currentText = subtitleElement.textContent;
         
-        let i = 0;
-        const timer = setInterval(() => {
-            if (i < descriptionText.length) {
-                descriptionElement.textContent += descriptionText.charAt(i);
-                i++;
-                
-                // Add natural pauses at punctuation
-                if (descriptionText.charAt(i - 1) === '.' || 
-                    descriptionText.charAt(i - 1) === ',' || 
-                    descriptionText.charAt(i - 1) === ';') {
-                    // Pause briefly at punctuation
-                    setTimeout(() => {}, 200);
-                }
+        if (!isDeleting) {
+            // Typing phase
+            if (currentIndex < subtitleText.length) {
+                subtitleElement.textContent = subtitleText.substring(0, currentIndex + 1);
+                currentIndex++;
+                setTimeout(typewriterLoop, typeSpeed + Math.random() * 50); // Add slight variation for realism
             } else {
-                clearInterval(timer);
-                // Keep description cursor blinking
-                if (descriptionCursor) {
-                    descriptionCursor.style.display = 'inline-block';
-                }
+                // Finished typing, pause before deleting
+                setTimeout(() => {
+                    isDeleting = true;
+                    typewriterLoop();
+                }, pauseAfterComplete);
             }
-        }, descriptionSpeed);
+        } else {
+            // Deleting phase
+            if (currentIndex > 0) {
+                subtitleElement.textContent = subtitleText.substring(0, currentIndex - 1);
+                currentIndex--;
+                setTimeout(typewriterLoop, deleteSpeed + Math.random() * 30); // Faster deletion with variation
+            } else {
+                // Finished deleting, pause before typing again
+                isDeleting = false;
+                setTimeout(typewriterLoop, pauseBeforeDelete);
+            }
+        }
     }
 };
 
@@ -79,7 +74,6 @@ window.restartTypingEffect = function() {
     
     if (subtitleElement && descriptionElement) {
         subtitleElement.textContent = '';
-        descriptionElement.textContent = '';
         
         const subtitleText = "Software Engineer & Cybersecurity Specialist";
         const descriptionText = "Passionate about cybersecurity analysis and building secure web applications with modern technologies. Specialized in security testing, vulnerability assessment, and .NET development with a focus on creating robust, scalable solutions that protect digital assets and enhance user experiences.";
