@@ -1,4 +1,4 @@
-// Professional Typing Effect with Continuous Loop
+// Professional Typing Effect with Continuous Loop for Subtitle Only
 window.startTypingEffect = function(subtitleText, descriptionText) {
     const subtitleElement = document.getElementById('typing-subtitle');
     const descriptionElement = document.getElementById('typing-description');
@@ -14,31 +14,24 @@ window.startTypingEffect = function(subtitleText, descriptionText) {
     const pauseBeforeDelete = 1500; // pause before starting to delete
     const initialDelay = 800; // initial delay before starting
     
-    // Hide cursors initially
-    if (subtitleCursor) subtitleCursor.style.display = 'none';
+    // Set description immediately and hide its cursor
+    descriptionElement.textContent = descriptionText;
     if (descriptionCursor) descriptionCursor.style.display = 'none';
     
-    // Clear existing content
+    // Clear subtitle and prepare for looping
     subtitleElement.textContent = '';
-    descriptionElement.textContent = descriptionText; // Set description immediately
+    if (subtitleCursor) subtitleCursor.style.display = 'none';
     
-    let isTyping = false;
     let currentIndex = 0;
     let isDeleting = false;
     
     // Start the continuous loop after initial delay
     setTimeout(() => {
-        startContinuousLoop();
-    }, initialDelay);
-    
-    function startContinuousLoop() {
         if (subtitleCursor) subtitleCursor.style.display = 'inline-block';
         typewriterLoop();
-    }
+    }, initialDelay);
     
     function typewriterLoop() {
-        const currentText = subtitleElement.textContent;
-        
         if (!isDeleting) {
             // Typing phase
             if (currentIndex < subtitleText.length) {
@@ -73,8 +66,6 @@ window.restartTypingEffect = function() {
     const descriptionElement = document.getElementById('typing-description');
     
     if (subtitleElement && descriptionElement) {
-        subtitleElement.textContent = '';
-        
         const subtitleText = "Software Engineer & Cybersecurity Specialist";
         const descriptionText = "Passionate about cybersecurity analysis and building secure web applications with modern technologies. Specialized in security testing, vulnerability assessment, and .NET development with a focus on creating robust, scalable solutions that protect digital assets and enhance user experiences.";
         
