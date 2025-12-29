@@ -1,8 +1,8 @@
 {
-  "buildCommand": "pwsh ./build-for-vercel.ps1",
-  "outputDirectory": "public",
-  "installCommand": "echo 'No install needed'",
   "framework": null,
+  "buildCommand": "bash build.sh",
+  "outputDirectory": "public",
+  "installCommand": "echo 'Dependencies will be installed in build script'",
   "rewrites": [
     {
       "source": "/(.*)",
@@ -11,25 +11,17 @@
   ],
   "headers": [
     {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cross-Origin-Embedder-Policy",
-          "value": "require-corp"
-        },
-        {
-          "key": "Cross-Origin-Opener-Policy",
-          "value": "same-origin"
-        }
-      ]
-    },
-    {
       "source": "/(.*)\\.(wasm|dll|pdb|dat|blat)",
       "headers": [
         {
           "key": "Content-Type",
           "value": "application/wasm"
-        },
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(br)",
+      "headers": [
         {
           "key": "Content-Encoding",
           "value": "br"
